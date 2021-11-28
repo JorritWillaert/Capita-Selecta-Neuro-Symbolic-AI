@@ -9,9 +9,17 @@
 
 	DeepProbLog offers the ability to integrate probabilistic knowledge with deep neural networks. This way, the strength of the neural network (system 1: typical subconscious tasks such as visual recognition, the processing of languages, \dots) is complemented with the strength of rule-based mechanisms (system 2: slow, sequential thinking such as the derivation of a proof). I propose an application that requires the integration of both systems.
 
-	The Sort-of-CLEVR dataset is a simplified version of the CLEVR dataset \cite{clevr_dataset}. This simplified dataset is composed of 10 000 images with per image 20 accompanied questions. An image consists of spread out objects, with randomly chosen shapes and colors. The questions are divided in 
+	The Sort-of-CLEVR dataset is a simplified version of the CLEVR dataset \cite{clevr_dataset}. This simplified dataset is composed of 10 000 images with per image 20 accompanied questions. An image consists of spread out objects, with randomly chosen shapes and colors. The questions are divided in two categories: non-relational and relational questions. Non-relational questions ask for example about the shape, the horizontal or vertical location of the colored object. Relational questions, on the other hand, ask about the shape of the object which is closest (or furthest) to a certain colored object, or ask about the number of objects with the same shape \cite{sort_of_clevr_dataset}.
+
+	\begin{figure}[htbp]
+		\centerline{\includegraphics[scale=.48]{example_image_of_dataset.png}}
+		\caption{An sample image from the Sort-of-CLEVR dataset \cite{sort_of_clevr_dataset}}
+		\label{image:example_image_of_dataset}
+		\end{figure}
+
+	A sample image is given in Figure \ref{image:example_image_of_dataset}. With this sample image, an answer on a non-relational question such as "What is the shape of the blue object?" would be: "square", while an answer on a relational question such as "How many objects have same the same shape as the blue one?" would be: "3".
 
 	\bibliographystyle{plain} 
-	\bibliography{library.bib} 
+	\bibliography{Capita_Selecta_AI_Initial_Idea} 
 	
 \end{document}

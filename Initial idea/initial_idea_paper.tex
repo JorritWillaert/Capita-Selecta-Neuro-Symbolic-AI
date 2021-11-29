@@ -19,9 +19,9 @@
 
 	A sample image is given in Figure \ref{image:example_image_of_dataset}. With this sample image, an answer on a non-relational question such as "What is the shape of the blue object?" would be: "square", while an answer on a relational question such as "How many objects have the same shape as the blue one?" would be: "3".
 
-	I propose to generate data based on the Sort-of-CLEVR dataset, with the simplification that objects may not be entirely randomly located, but instead only in certain positions on a grid. A 5 by 5 grid could for example be used. The generation of new images and accompanied questions is rather straightforward, which could probably even be done at training time.
+	I propose to generate data based on the Sort-of-CLEVR dataset, with the simplification that objects may not be entirely randomly located, but instead only in certain positions on a grid. A 5-by-5 grid could for example be used. The generation of new images and accompanied questions is rather straightforward, which could probably even be done at training time.
 	
-	I would use 25 convolutional neural networks, one for each grid position. The output would naturally be if an object is located in that position, and what its shape and color is. Once the location, shapes and colors of the objects are known, rule-based mechanisms can be used to answer the accompanied questions.
+	I would use 25 convolutional neural networks, one for each grid position. The output would, naturally, indicate if an object is located in that position, and what its shape and color is. Once the location, shapes and colors of the objects are known, rule-based mechanisms can be used to answer the accompanied questions.
 
 	\bibliographystyle{plain} 
 	\bibliography{Capita_Selecta_AI_Initial_Idea} 

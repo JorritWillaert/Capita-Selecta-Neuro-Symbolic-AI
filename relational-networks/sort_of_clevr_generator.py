@@ -11,14 +11,14 @@ import warnings
 import argparse
 
 parser = argparse.ArgumentParser(description='Sort-of-CLEVR dataset generator')
-parser.add_argument('--seed', type=int, default=1, metavar='S',
+parser.add_argument('--seed', type=int, default=3, metavar='S',
                     help='random seed (default: 1)')
 parser.add_argument('--t-subtype', type=int, default=-1,
                     help='Force ternary questions to be of a given type')
 args = parser.parse_args()
 
-#random.seed(args.seed)
-#np.random.seed(args.seed)
+random.seed(args.seed)
+np.random.seed(args.seed)
 
 IMG_SIZE = 100
 NUM_OBJECTS = 2
@@ -40,9 +40,9 @@ class Object:
         self.shape = shape
 
 size = 5
-question_size = 2 * len(colors) + 2 + 3 ## 2 x (6 for one-hot vector of color), 3 for question type (nonbinary VS binary), 3 for question subtype
-q_type_idx = 2 * len(colors)
-sub_q_type_idx = 2 * len(colors) + 2
+question_size = len(colors) + 2 + 3 ## (number of colors for one-hot vector of color), 3 for question type (nonbinary VS binary), 3 for question subtype
+q_type_idx = len(colors)
+sub_q_type_idx = len(colors) + 2
 """Answer : [yes, no, rectangle, circle, r, g, b, o, k, y]"""
 
 nb_questions = 10
@@ -113,6 +113,7 @@ def build_nonrelational_questions(objects):
 
         elif subtype == 1:
             """query horizontal position->yes/no"""
+            print(objects[color].position)
             if pos_to_coor(objects[color].position)[0] < IMG_SIZE / 2:
                 answer = 0
             else:
@@ -120,7 +121,7 @@ def build_nonrelational_questions(objects):
 
         elif subtype == 2:
             """query vertical position->yes/no"""
-            if pos_to_coor(objects[color].position)[1] < IMG_SIZE / 2:
+            if pos_to_coor(objects[color].position)[1] > IMG_SIZE / 2: # Be aware, the y axis runs downward!!!
                 answer = 0
             else:
                 answer = 1
@@ -185,5 +186,8 @@ def build_dataset_item():
     return dataset
 
 img, norelations, binary_relations = build_dataset_item()
+print(binary_relations[0])
+print()
+print(binary_relations[1])
 cv2.imwrite('./test.png', img)
 

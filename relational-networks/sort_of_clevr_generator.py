@@ -40,9 +40,9 @@ class Object:
         self.shape = shape
 
 size = 5
-question_size = 18  ## 2 x (6 for one-hot vector of color), 3 for question type, 3 for question subtype
-q_type_idx = 12
-sub_q_type_idx = 15
+question_size = 2 * len(colors) + 2 + 3 ## 2 x (6 for one-hot vector of color), 3 for question type (nonbinary VS binary), 3 for question subtype
+q_type_idx = 2 * len(colors)
+sub_q_type_idx = 2 * len(colors) + 2
 """Answer : [yes, no, rectangle, circle, r, g, b, o, k, y]"""
 
 nb_questions = 10
@@ -88,12 +88,102 @@ def build_one_image():
             objects.append(Object(color, position, 'square'))
         else:
             center = (int(x_coor), int(y_coor))
-            cv2.circle(img, center, size, color, -1)
+            cv2.circle(img, center, int((IMG_SIZE / (2 * WIDTH)) - 5), color, -1)
             objects.append(Object(color, position, 'circle'))
-    return img
+    return img, objects
 
-img = build_one_image()
-#cv2.imshow("Dataset", img)
-#cv2.waitKey(5000)
+def build_nonrelational_questions(objects):
+    nonrelational_questions = []
+    nonrelational_answers = []
+    for _ in range(nb_questions):
+        question = np.zeros((question_size))
+        color = random.randint(0, len(colors) - 1)
+        question[color] = 1
+        question[q_type_idx] = 1
+        subtype = random.randint(0,2)
+        question[subtype+sub_q_type_idx] = 1
+        nonrelational_questions.append(question)
+        """Answer : [yes, no, rectangle, circle, r, g, b, o, k, y]"""
+        if subtype == 0:
+            """query shape->rectangle/circle"""
+            if objects[color].shape == 'square':
+                answer = 2
+            else:
+                answer = 3
+
+        elif subtype == 1:
+            """query horizontal position->yes/no"""
+            if pos_to_coor(objects[color].position)[0] < IMG_SIZE / 2:
+                answer = 0
+            else:
+                answer = 1
+
+        elif subtype == 2:
+            """query vertical position->yes/no"""
+            if pos_to_coor(objects[color].position)[1] < IMG_SIZE / 2:
+                answer = 0
+            else:
+                answer = 1
+        nonrelational_answers.append(answer)
+    return nonrelational_questions, nonrelational_answers
+
+def build_binary_questions(objects):
+    binary_questions = []
+    binary_answers = []
+    for _ in range(nb_questions):
+        question = np.zeros((question_size))
+        color = random.randint(0, len(colors) - 1)
+        question[color] = 1
+        question[q_type_idx+1] = 1
+        subtype = random.randint(0,2)
+        question[subtype+sub_q_type_idx] = 1
+        binary_questions.append(question)
+
+        if subtype == 0:
+            """closest-to->rectangle/circle"""
+            my_obj = objects[color]
+            dist_list = [((np.subtract(pos_to_coor(my_obj.position), pos_to_coor(obj.position))) ** 2).sum() for obj in objects]
+            dist_list[dist_list.index(0)] = float('inf') # The distance to the element itself should not be considered
+            closest = dist_list.index(min(dist_list))
+            if objects[closest].shape == 'square':
+                answer = 2
+            else:
+                answer = 3
+                
+        elif subtype == 1:
+            """furthest-from->rectangle/circle"""
+            my_obj = objects[color]
+            dist_list = [((np.subtract(pos_to_coor(my_obj.position), pos_to_coor(obj.position))) ** 2).sum() for obj in objects]
+            furthest = dist_list.index(max(dist_list))
+            if objects[furthest].shape == 'square':
+                answer = 2
+            else:
+                answer = 3
+
+        elif subtype == 2:
+            """count->1~6"""
+            my_obj = objects[color]
+            count = -1
+            for obj in objects:
+                if obj.shape == my_obj.shape:
+                    count +=1
+            answer = count+4 # Not 'yes', 'no', 'square' or 'circle' (make this clear with the +4)
+
+        binary_answers.append(answer)
+    return binary_questions, binary_answers
+
+def build_dataset_item():
+    img, objects = build_one_image()
+    nonrelational_questions, nonrelational_answers = build_nonrelational_questions(objects)
+    binary_questions, binary_answers = build_binary_questions(objects)
+
+    binary_relations = (binary_questions, binary_answers)
+    norelations = (nonrelational_questions, nonrelational_answers)
+    
+    #img = img/255.
+    dataset = (img, norelations, binary_relations)
+    return dataset
+
+img, norelations, binary_relations = build_dataset_item()
 cv2.imwrite('./test.png', img)
-#cv2.destroyAllWindows("Dataset")
+

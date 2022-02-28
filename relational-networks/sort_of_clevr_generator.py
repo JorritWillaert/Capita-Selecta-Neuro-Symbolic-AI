@@ -186,8 +186,4 @@ def build_dataset_item():
     return dataset
 
 img, norelations, binary_relations = build_dataset_item()
-print(binary_relations[0])
-print()
-print(binary_relations[1])
 cv2.imwrite('./test.png', img)
-

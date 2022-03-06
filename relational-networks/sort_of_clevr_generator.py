@@ -12,7 +12,7 @@ import argparse
 import csv
 
 parser = argparse.ArgumentParser(description='Sort-of-CLEVR dataset generator')
-parser.add_argument('--seed', type=int, default=3, metavar='S',
+parser.add_argument('--seed', type=int, default=10, metavar='S',
                     help='random seed (default: 1)')
 parser.add_argument('--t-subtype', type=int, default=-1,
                     help='Force ternary questions to be of a given type')
@@ -182,7 +182,7 @@ def build_dataset_item():
     return dataset
 
 if __name__ == "__main__":
-    with open('../deepproblog/src/deepproblog/examples/SORTOFCLEVR/data/test/test.csv', 'w') as f:
+    with open('../deepproblog/src/deepproblog/examples/SORTOFCLEVR/data/val/val.csv', 'w') as f:
         writer = csv.writer(f)
         for i in range(2000):
             img, norelations, binary_relations = build_dataset_item()
@@ -195,5 +195,5 @@ if __name__ == "__main__":
             for q in questions_binary_relations:
                 array.append(q)
             array.append(answer_binary_relations)
-            cv2.imwrite('../deepproblog/src/deepproblog/examples/SORTOFCLEVR/data/test/images/' + str(i) + '.png', img)
+            cv2.imwrite('../deepproblog/src/deepproblog/examples/SORTOFCLEVR/data/val/images/' + str(i) + '.png', img)
             writer.writerow(array)

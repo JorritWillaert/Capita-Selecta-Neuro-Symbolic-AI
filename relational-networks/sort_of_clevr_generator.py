@@ -9,6 +9,7 @@ import random
 import pickle
 import warnings
 import argparse
+import csv
 
 parser = argparse.ArgumentParser(description='Sort-of-CLEVR dataset generator')
 parser.add_argument('--seed', type=int, default=3, metavar='S',
@@ -45,7 +46,7 @@ q_type_idx = len(colors)
 sub_q_type_idx = len(colors) + 2
 """Answer : [yes, no, rectangle, circle, r, g, b, o, k, y]"""
 
-nb_questions = 10
+nb_questions = 1
 dirs = './data'
 
 try:
@@ -76,14 +77,10 @@ def build_one_image():
     img = np.ones((IMG_SIZE, IMG_SIZE, 3)) * 255
     for color in colors:
         position = generate_position(objects)
-        print(position)
         x_coor, y_coor = pos_to_coor(position)
-        print(x_coor, y_coor)
         if random.random()<0.5:
             start = (int(x_coor - (IMG_SIZE / (2 * WIDTH)) + 5), int(y_coor - (IMG_SIZE / (2 * WIDTH)) + 5))
-            print(start)
             end = (int(x_coor + (IMG_SIZE / (2 * WIDTH)) - 5), int(y_coor + (IMG_SIZE / (2 * WIDTH)) - 5))
-            print(end)
             cv2.rectangle(img, start, end, color, -1)
             objects.append(Object(color, position, 'square'))
         else:
@@ -113,7 +110,6 @@ def build_nonrelational_questions(objects):
 
         elif subtype == 1:
             """query horizontal position->yes/no"""
-            print(objects[color].position)
             if pos_to_coor(objects[color].position)[0] < IMG_SIZE / 2:
                 answer = 0
             else:
@@ -185,5 +181,19 @@ def build_dataset_item():
     dataset = (img, norelations, binary_relations)
     return dataset
 
-img, norelations, binary_relations = build_dataset_item()
-cv2.imwrite('./test.png', img)
+if __name__ == "__main__":
+    with open('../deepproblog/src/deepproblog/examples/SORTOFCLEVR/data/test/test.csv', 'w') as f:
+        writer = csv.writer(f)
+        for i in range(2000):
+            img, norelations, binary_relations = build_dataset_item()
+            questions_no_relations, answer_no_relations = norelations
+            questions_binary_relations, answer_binary_relations = binary_relations
+            array = []
+            for q in questions_no_relations:
+                array.append(q)
+            array.append(answer_no_relations)
+            for q in questions_binary_relations:
+                array.append(q)
+            array.append(answer_binary_relations)
+            cv2.imwrite('../deepproblog/src/deepproblog/examples/SORTOFCLEVR/data/test/images/' + str(i) + '.png', img)
+            writer.writerow(array)

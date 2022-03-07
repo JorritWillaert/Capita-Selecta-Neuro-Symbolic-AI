@@ -12,7 +12,7 @@ transform = transforms.Compose(
     [transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))]
 )
 
-class Coins(ImageDataset):
+class SORTOFCLEVRDataset(ImageDataset):
     def __init__(
         self,
         subset,
@@ -24,6 +24,10 @@ class Coins(ImageDataset):
             for line in f:
                 norelational_question, norelational_answer, binary_question, binary_answer = \
                     [(l.rstrip('\n')[1:-1]).split() for l in line.split(",")]
+                norelational_question = list(map(int, list(map(float, norelational_question))))
+                norelational_answer = int(float(norelational_answer[0]))
+                binary_question = list(map(int, list(map(float, binary_question))))
+                binary_answer = int(float(binary_answer[0]))
                 self.data.append((norelational_question, norelational_answer, binary_question, binary_answer))
 
     def to_query(self, i):
@@ -32,7 +36,7 @@ class Coins(ImageDataset):
         sh = None
         if norelational_question[0] == 1: # Question about red object
             sh = "red"
-        elif norelational_answer[1] == 1:
+        elif norelational_question[1] == 1:
             sh = "green"
         else:
             print("[ERROR] No object specified")
@@ -44,6 +48,8 @@ class Coins(ImageDataset):
         else:
             print("[ERROR] No type of question specified")
         
+        question = None
+        outcome = None
         if norelational_question[4] == 1: # Query about the shape of the object
             question = "shape"
             if norelational_answer == 2:
@@ -52,7 +58,7 @@ class Coins(ImageDataset):
                 outcome = "circle"
             else:
                 print("[ERROR] Wrong outcome for the shape")
-        if norelational_question[5] == 1: # Query about the horizontal position
+        elif norelational_question[5] == 1: # Query about the horizontal position
             question = "horizontal_side"
             if norelational_answer == 0:
                 outcome = "left"
@@ -60,7 +66,7 @@ class Coins(ImageDataset):
                 outcome = "right"
             else: 
                 print("[ERROR] Wrong outcome for the horizontal position")
-        if norelational_question[6] == 1: # Query about the vertical position
+        elif norelational_question[6] == 1: # Query about the vertical position
             question = "vertical_side"
             if norelational_answer == 0:
                 outcome = "bottom"
@@ -68,6 +74,8 @@ class Coins(ImageDataset):
                 outcome = "top"
             else: 
                 print("[ERROR] Wrong outcome for the vertical position")
+        else:
+            print("[ERROR] No question specified")
 
         sub = {Term("image"): Term("tensor", Term(self.subset, Constant(i)))}
         
@@ -77,5 +85,5 @@ class Coins(ImageDataset):
         return len(self.data)
 
 if __name__ == "__main__":
-    train_dataset = Coins("train")
-    test_dataset = Coins("test")
+    train_dataset = SORTOFCLEVRDataset("train")
+    test_dataset = SORTOFCLEVRDataset("test")

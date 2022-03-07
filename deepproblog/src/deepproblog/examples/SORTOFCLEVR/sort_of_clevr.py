@@ -9,7 +9,7 @@ from deepproblog.utils import format_time_precise
 from deepproblog.evaluate import get_confusion_matrix
 from deepproblog.train import train_model
 from deepproblog.dataset import DataLoader
-from deepproblog.examples.SORTOFCLEVR.data.data import SORTOFCLEVRDataset
+from data.data import SORTOFCLEVRDataset
 
 
 cnn_red = CNNNetwork(out_size=8)
@@ -20,13 +20,15 @@ net_green = Network(cnn_green, "cnn_green", Adam(cnn_green.parameters(), lr=3e-3
 
 model = Model("/home/jorrit/Data/KU Leuven/Semester 12/Capita Selecta H05N0a/deepproblog/src/deepproblog/examples/HWF/model.pl", [net_red, net_green])
 
-# model.add_tensor_source("sort_of_clevr", TODO)
-model.set_engine(ExactEngine(model), cache=True)
-
-dataset = SORTOFCLEVRDataset("train")
+train_dataset = SORTOFCLEVRDataset("train")
 val_dataset = SORTOFCLEVRDataset("val")
 test_dataset = SORTOFCLEVRDataset("test")
-loader = DataLoader(dataset, 32, shuffle=True)
+loader = DataLoader(train_dataset, 32, shuffle=True)
+
+model.add_tensor_source("train", train_dataset)
+model.add_tensor_source("val", val_dataset)
+model.add_tensor_source("test", test_dataset)
+model.set_engine(ExactEngine(model), cache=True)
 
 train_log = train_model(
     model,

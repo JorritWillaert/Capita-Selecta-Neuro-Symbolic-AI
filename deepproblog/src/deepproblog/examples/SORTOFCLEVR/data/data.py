@@ -22,22 +22,60 @@ class Coins(ImageDataset):
         self.subset = subset
         with open("{}/{}/{}.csv".format(path, subset, subset)) as f:
             for line in f:
-                norelational_question, norelational_answer, binary_question, binary_answer = [(l.rstrip('\n')[1:-1]).split() for l in line.split(",")]
+                norelational_question, norelational_answer, binary_question, binary_answer = \
+                    [(l.rstrip('\n')[1:-1]).split() for l in line.split(",")]
                 self.data.append((norelational_question, norelational_answer, binary_question, binary_answer))
 
     def to_query(self, i):
         norelational_question, norelational_answer, binary_question, binary_answer = self.data[i]
-        #sub = {Term("a"): Term("tensor", Term(self.subset, Constant(i)))}
-        # if j == 0:
-        #     return Term('coin', Constant(j + 1), Term('a'), Term(c1)), sub
-        # elif j == 1:
-        #     return Term('coin', Constant(j + 1), Term('a'), Term(c2)), sub
-        # else:
-        #return Query(Term("game", Term("a"), Term(outcome)), sub)
+        # Begin with nonrelational 
+        sh = None
+        if norelational_question[0] == 1: # Question about red object
+            sh = "red"
+        elif norelational_answer[1] == 1:
+            sh = "green"
+        else:
+            print("[ERROR] No object specified")
+        
+        if norelational_question[2] == 1: # Nonbinary question
+            pass
+        elif norelational_question[3] == 1: # Binary question
+            print("Not yet defined")
+        else:
+            print("[ERROR] No type of question specified")
+        
+        if norelational_question[4] == 1: # Query about the shape of the object
+            question = "shape"
+            if norelational_answer == 2:
+                outcome = "rectangle"
+            elif norelational_answer == 3:
+                outcome = "circle"
+            else:
+                print("[ERROR] Wrong outcome for the shape")
+        if norelational_question[5] == 1: # Query about the horizontal position
+            question = "horizontal_side"
+            if norelational_answer == 0:
+                outcome = "left"
+            elif norelational_answer == 1:
+                outcome = "right"
+            else: 
+                print("[ERROR] Wrong outcome for the horizontal position")
+        if norelational_question[6] == 1: # Query about the vertical position
+            question = "vertical_side"
+            if norelational_answer == 0:
+                outcome = "bottom"
+            elif norelational_answer == 1:
+                outcome = "top"
+            else: 
+                print("[ERROR] Wrong outcome for the vertical position")
+
+        sub = {Term("image"): Term("tensor", Term(self.subset, Constant(i)))}
+        
+        return Query(Term(question, Term(sh), Term("image"), Term(outcome)), sub)
 
     def __len__(self):
         return len(self.data)
 
-
-train_dataset = Coins("train")
-test_dataset = Coins("test")
+if __name__ == "__main__":
+    train_dataset = Coins("train")
+    test_dataset = Coins("test")

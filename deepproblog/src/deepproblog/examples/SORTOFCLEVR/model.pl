@@ -1,8 +1,8 @@
 % We know that there are two objects in a four grid space. Two shapes possible, two colors possible.
 % The green cnn detects the position, and the shape --> x. If x < 4: Shape = rectangle. Else: shape = circle. (x modulo 4 = position)  
 
-nn(cnn_red,[X],Y,[0,1,2,3,4,5,6,7]) :: detect_state(red, X, Y_red).
-nn(cnn_green, [X], Y, [0,1,2,3,4,5,6,7]) :: detect_state(green, X, Y_green).
+nn(cnn_red,[X],Y_red,[0,1,2,3,4,5,6,7]) :: detect_state(red, X, Y_red).
+nn(cnn_green, [X], Y_green, [0,1,2,3,4,5,6,7]) :: detect_state(green, X, Y_green).
 
 shape(red, Img, rectangle) :-
     detect_state(red, Img, Y_red),

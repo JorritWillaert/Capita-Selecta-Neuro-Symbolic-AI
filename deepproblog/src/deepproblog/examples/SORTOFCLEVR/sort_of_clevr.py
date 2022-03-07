@@ -1,7 +1,7 @@
 from json import dumps
 from torch.optim import Adam
 
-from deepproblog.examples.SORTOFCLEVR.network import CNNNetwork
+from network import CNNNetwork
 from deepproblog.network import Network
 from deepproblog.model import Model
 from deepproblog.engines.exact_engine import ExactEngine
@@ -18,7 +18,7 @@ cnn_green = CNNNetwork(out_size=8)
 net_red = Network(cnn_red, "cnn_red", Adam(cnn_red.parameters(), lr=3e-3), batching=True)
 net_green = Network(cnn_green, "cnn_green", Adam(cnn_green.parameters(), lr=3e-3), batching=True)
 
-model = Model("/home/jorrit/Data/KU Leuven/Semester 12/Capita Selecta H05N0a/deepproblog/src/deepproblog/examples/HWF/model.pl", [net_red, net_green])
+model = Model("/home/jorrit/Data/KU Leuven/Semester 12/Capita Selecta H05N0a/deepproblog/src/deepproblog/examples/SORTOFCLEVR/model.pl", [net_red, net_green])
 
 train_dataset = SORTOFCLEVRDataset("train")
 val_dataset = SORTOFCLEVRDataset("val")
@@ -35,12 +35,12 @@ train_log = train_model(
     loader,
     50,
     log_iter=50,
-    inital_test=False,
-    test_iter=100,
-    test=lambda x: [
-        ("Val_accuracy", get_confusion_matrix(x, val_dataset, eps=1e-6).accuracy()),
-        ("Test_accuracy", get_confusion_matrix(x, test_dataset, eps=1e-6).accuracy()),
-    ],
+    #inital_test=False,
+    #test_iter=100,
+    #test=lambda x: [
+    #    ("Val_accuracy", get_confusion_matrix(x, val_dataset, eps=1e-6).accuracy()),
+    #    ("Test_accuracy", get_confusion_matrix(x, test_dataset, eps=1e-6).accuracy()),
+    #],
 )
 
 name = "sort_of_clevr_" + format_time_precise()

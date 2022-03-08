@@ -4,33 +4,67 @@
 nn(cnn_red,[X],Y_red,[0,1,2,3,4,5,6,7]) :: detect_state(red, X, Y_red).
 nn(cnn_green, [X], Y_green, [0,1,2,3,4,5,6,7]) :: detect_state(green, X, Y_green).
 
-shape(red, Img, rectangle) :-
+red_shape(Img, Rectangle) :-
     detect_state(red, Img, Y_red),
-    Y_red < 4.
+    Y_red < 4,
+    Rectangle = 1.
+red_shape(Img, Rectangle) :-
+    detect_state(red, Img, Y_red),
+    Y_red >= 4,
+    Rectangle = 0.
 
-shape(green, Img, rectangle) :-
+green_shape(Img, Rectangle) :-
     detect_state(green, Img, Y_green),
-    Y_green < 4.
+    Y_green < 4, 
+    Rectangle = 1.
+green_shape(Img, Rectangle) :-
+    detect_state(green, Img, Y_green),
+    Y_green >= 4, 
+    Rectangle = 0.
 
-horizontal_side(red, Img, left) :-
+red_horizontal_side(Img, Left) :-
     detect_state(red, Img, Y_red),
     position(Y_red, Pos),
-    left_side(Pos).
-
-horizontal_side(green, Img, left) :-
-    detect_state(green, Img, Y_green),
-    position(Y_green, Pos),
-    left_side(Pos).
-
-vertical_side(red, Img, bottom) :-
+    left_side(Pos), 
+    Left = 1.
+red_horizontal_side(Img, Left) :-
     detect_state(red, Img, Y_red),
     position(Y_red, Pos),
-    bottom_side(Pos).
+    \+ left_side(Pos), 
+    Left = 0.
 
-vertical_side(green, Img, bottom) :-
+green_horizontal_side(Img, Left) :-
     detect_state(green, Img, Y_green),
     position(Y_green, Pos),
-    bottom_side(Pos).
+    left_side(Pos), 
+    Left = 1.
+green_horizontal_side(Img, Left) :-
+    detect_state(green, Img, Y_green),
+    position(Y_green, Pos),
+    \+ left_side(Pos), 
+    Left = 0.
+
+red_vertical_side(Img, Bottom) :-
+    detect_state(red, Img, Y_red),
+    position(Y_red, Pos),
+    bottom_side(Pos), 
+    Bottom = 1.
+red_vertical_side(Img, Bottom) :-
+    detect_state(red, Img, Y_red),
+    position(Y_red, Pos),
+    \+ bottom_side(Pos), 
+    Bottom = 0.
+
+green_vertical_side(Img, Bottom) :-
+    detect_state(green, Img, Y_green),
+    position(Y_green, Pos),
+    bottom_side(Pos), 
+    Bottom = 1.
+green_vertical_side(Img, Bottom) :-
+    detect_state(green, Img, Y_green),
+    position(Y_green, Pos),
+    \+ bottom_side(Pos), 
+    Bottom = 0.
 
 position(Out, Pos) :-
     Pos is Out mod 4.

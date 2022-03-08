@@ -53,33 +53,33 @@ class SORTOFCLEVRDataset(ImageDataset):
         if norelational_question[4] == 1: # Query about the shape of the object
             question = "shape"
             if norelational_answer == 2:
-                outcome = "rectangle"
+                outcome = 1 #"rectangle"
             elif norelational_answer == 3:
-                outcome = "circle"
+                outcome = 0 # "circle"
             else:
                 print("[ERROR] Wrong outcome for the shape")
         elif norelational_question[5] == 1: # Query about the horizontal position
             question = "horizontal_side"
             if norelational_answer == 0:
-                outcome = "left"
+                outcome = 1 # "left"
             elif norelational_answer == 1:
-                outcome = "right"
+                outcome = 0 # "right"
             else: 
                 print("[ERROR] Wrong outcome for the horizontal position")
         elif norelational_question[6] == 1: # Query about the vertical position
             question = "vertical_side"
             if norelational_answer == 0:
-                outcome = "bottom"
+                outcome = 1 # "bottom"
             elif norelational_answer == 1:
-                outcome = "top"
+                outcome = 0 # "top"
             else: 
                 print("[ERROR] Wrong outcome for the vertical position")
         else:
             print("[ERROR] No question specified")
 
         sub = {Term("image"): Term("tensor", Term(self.subset, Constant(i)))}
-        
-        return Query(Term(question, Term(sh), Term("image"), Term(outcome)), sub)
+        question = sh + "_" + question
+        return Query(Term(question, Term("image"), Constant(outcome)), sub)
 
     def __len__(self):
         return len(self.data)

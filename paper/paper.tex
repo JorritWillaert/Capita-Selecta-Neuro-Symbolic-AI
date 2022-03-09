@@ -40,8 +40,31 @@ The Neuro Symbolic AI community is growing rapidly, indicating that people start
 
 This paper elaborates on an application that requires both systems to be used, namely Visual Question Answering. System 1 will be required in order to gain an understanding of the image under investigation, with in particular their shapes and colors. System 2, on the other hand, will use this extracted information for deriving certain properties of objects\footnote{For example, finding the shape of the green object, or deriving if it is located on the left hand side of the image.}, or even for capturing the relations\footnote{Here, one could think of deriving if an object is located to the left of another object, or also for finding the number of circles in the image.} between the objects. 
 
+\section{LITERATURE SURVEY}
+The application focuses on Visual Question Answering (VQA), for which huge datasets are present, along with very sophisticated methods. The best known dataset for VQA is CLEVR \cite{clevr_dataset}, which contains 100k images with one million questions. An example image is given in Figure \ref{fig:sample_image_clevr}, while example questions are:
+\begin{itemize}
+    \item Are there an equal number of large things and metal spheres?
+    \item What size is the cylinder that is left of the brown metal thing that is left of the big sphere?
+    \item How many objects are either small cylinders or metal things?
+\end{itemize}
+
+\begin{figure}[H]
+    \begin{center}
+    \includegraphics[width=0.3\textwidth]{clevr.jpg}
+    \captionsetup{justification=centering}
+    \caption{A sample image from the CLEVR dataset \cite{clevr_dataset}}
+    \label{fig:sample_image_clevr}
+    \end{center}
+\end{figure}
+
+Clearly, both system 1 and system 2 are actively used when answering these questions. One could wonder if neural networks alone could answer these questions without having an explicit system 2 encoding (i.e. the rule based knowledge base). Intuitively, it makes sense that if certain facts of the world are known\footnote{They can be encoded, e.g. counting the number of spheres is simply a matter of detecting all the spheres in the image, after which a mathematical summation is a statement in the knowledge base.}, learning can proceed much more quickly\footnote{Not to say that learning might even be impossible if a lot of background knowledge is required.}. Seen from an optimization viewpoint, errors made during prediction in this setup can be targeted exactly, which makes the optimization process also more targeted, and hence more efficient. Finally, this paper also provides evidence for these statements, since in Section \ref{comparison_with_CNN} % TODO ref here
+the comparison between this implementation with DeepProbLog is made with a purely CNN based approach. % TODO is this the case?
+
+\section{COMPARISONS WITH PURE SYSTEM 1 APPROACHES}
+\label{comparison_with_CNN}
+
 \section{ORGANIZATION OF THE PAPER}
-%TODO
+%TODO. Put this above the literature study
 
 This section presents the main issues for editing the manuscript.
 

@@ -57,8 +57,26 @@ The application focuses on Visual Question Answering (VQA), for which huge datas
     \end{center}
 \end{figure}
 
-Clearly, both system 1 and system 2 are actively used when answering these questions. One could wonder if neural networks alone could answer these questions without having an explicit system 2 encoding (i.e. the rule based knowledge base). Intuitively, it makes sense that if certain facts of the world are known\footnote{They can be encoded, e.g. counting the number of spheres is simply a matter of detecting all the spheres in the image, after which a mathematical summation is a statement in the knowledge base.}, learning can proceed much more quickly\footnote{Not to say that learning might even be impossible if a lot of background knowledge is required.}. Seen from an optimization viewpoint, errors made during prediction in this setup can be targeted exactly, which makes the optimization process also more targeted, and hence more efficient. Finally, this paper also provides evidence for these statements, since in Section \ref{comparison_with_CNN} % TODO ref here
-the comparison between this implementation with DeepProbLog is made with a purely CNN based approach. % TODO is this the case?
+Clearly, both system 1 and system 2 are actively used when answering these questions. One could wonder if neural networks alone could answer these questions without having an explicit system 2 encoding (i.e. the rule based knowledge base). Intuitively, it makes sense that if certain facts of the world are known\footnote{They can be encoded, e.g. counting the number of spheres is simply a matter of detecting all the spheres in the image, after which a mathematical summation is a statement in the knowledge base.}, learning can proceed much more quickly\footnote{Not to say that learning might even be impossible if a lot of background knowledge is required.}. Seen from an optimization viewpoint, errors made during prediction in this setup can be targeted exactly, which makes the optimization process also more targeted, and hence more efficient. Finally, this paper also provides evidence for these statements, since in Section \ref{comparison_with_CNN}, the comparison between a VQA implementation with DeepProbLog is made with a purely CNN based approach. % TODO is this the case?
+
+This paper is based on the CLEVR dataset, but uses however a much more simplified version. In essence, it is almost like the Sort-Of-CLEVR dataset \cite{sort_of_clevr_dataset}. This Sort-Of-CLEVR dataset contains images such as in Figure \ref{fig:sample_image_sort_of_clevr}, while asking questions such as:
+\begin{itemize}
+    \item Non-relational questions: the shape, horizontal or vertical location of an object.
+    \item Relational questions: shape of the closest/furthest object to the object under investigation, or the number of objects with the same shape.
+\end{itemize}
+
+\begin{figure}[H]
+    \begin{center}
+    \includegraphics[width=0.3\textwidth]{sort_of_clevr.png}
+    \captionsetup{justification=centering}
+    \caption{A sample image from the CLEVR dataset \cite{sort_of_clevr_dataset}}
+    \label{fig:sample_image_sort_of_clevr}
+    \end{center}
+\end{figure}
+
+As explained earlier, both system 1 and system 2 are required for these types of VQA's.
+
+Finally, since this application uses DeepProbLog, quite some time was spent in digesting the DeepProbLog paper \cite{deepproblog}, along with understanding the  examples provided in the code repository \cite{deepproblog_code}.
 
 \section{COMPARISONS WITH PURE SYSTEM 1 APPROACHES}
 \label{comparison_with_CNN}

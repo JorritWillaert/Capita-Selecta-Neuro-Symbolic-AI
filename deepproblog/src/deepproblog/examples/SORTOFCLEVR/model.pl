@@ -66,6 +66,29 @@ green_vertical_side(Img, Bottom) :-
     \+ bottom_side(Pos), 
     Bottom = 0.
 
+% Note: Do not need red_number_of_shapes and green_number_of_shapes right now. But has been added since this will be necessary later (implementation with same_shape will have to change too though)
+red_number_of_shapes(Img, Count) :-
+    detect_state(red, Img, Y_red),
+    detect_state(green, Img, Y_green),
+    same_shape(Y_red, Y_green),
+    Count = 2.
+red_number_of_shapes(Img, Count) :-
+    detect_state(red, Img, Y_red),
+    detect_state(green, Img, Y_green),
+    \+ same_shape(Y_red, Y_green),
+    Count = 1.
+
+green_number_of_shapes(Img, Count) :-
+    detect_state(red, Img, Y_red),
+    detect_state(green, Img, Y_green),
+    same_shape(Y_red, Y_green),
+    Count = 2.
+green_number_of_shapes(Img, Count) :-
+    detect_state(red, Img, Y_red),
+    detect_state(green, Img, Y_green),
+    \+ same_shape(Y_red, Y_green),
+    Count = 1.
+
 position(Out, Pos) :-
     Pos is Out mod 4.
 
@@ -80,3 +103,6 @@ bottom_side(Out) :-
 to_coor(Out, X, Y) :-
     X is Out mod 2, 
     Y is Out // 2.
+
+same_shape(Y1, Y2) :-
+    (Y1 >= 4, Y2 >= 4) ; (Y1 < 4, Y2 < 4).

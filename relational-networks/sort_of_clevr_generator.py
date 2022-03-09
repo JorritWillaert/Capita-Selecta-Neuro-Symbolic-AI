@@ -18,9 +18,6 @@ parser.add_argument('--t-subtype', type=int, default=-1,
                     help='Force ternary questions to be of a given type')
 args = parser.parse_args()
 
-random.seed(args.seed)
-np.random.seed(args.seed)
-
 IMG_SIZE = 100
 NUM_OBJECTS = 2
 WIDTH = 2
@@ -41,7 +38,7 @@ class Object:
         self.shape = shape
 
 size = 5
-question_size = len(colors) + 2 + 3 ## (number of colors for one-hot vector of color), 3 for question type (nonbinary VS binary), 3 for question subtype
+question_size = len(colors) + 2 + 3 ## (number of colors for one-hot vector of color), 2 for question type (nonbinary VS binary), 3 for question subtype
 q_type_idx = len(colors)
 sub_q_type_idx = len(colors) + 2
 """Answer : [yes, no, rectangle, circle, r, g, b, o, k, y]"""
@@ -132,30 +129,34 @@ def build_binary_questions(objects):
         color = random.randint(0, len(colors) - 1)
         question[color] = 1
         question[q_type_idx+1] = 1
-        subtype = random.randint(0,2)
+        #subtype = random.randint(0,2)
+        subtype = 2
         question[subtype+sub_q_type_idx] = 1
         binary_questions.append(question)
 
         if subtype == 0:
             """closest-to->rectangle/circle"""
-            my_obj = objects[color]
-            dist_list = [((np.subtract(pos_to_coor(my_obj.position), pos_to_coor(obj.position))) ** 2).sum() for obj in objects]
-            dist_list[dist_list.index(0)] = float('inf') # The distance to the element itself should not be considered
-            closest = dist_list.index(min(dist_list))
-            if objects[closest].shape == 'square':
-                answer = 2
-            else:
-                answer = 3
+            pass
+            # Skipped
+            #my_obj = objects[color]
+            #dist_list = [((np.subtract(pos_to_coor(my_obj.position), #pos_to_coor(obj.position))) ** 2).sum() for obj in objects]
+            #dist_list[dist_list.index(0)] = float('inf') # The distance to the element itself should not be considered
+            #closest = dist_list.index(min(dist_list))
+            #if objects[closest].shape == 'square':
+            #    answer = 2
+            #else:
+            #    answer = 3
                 
         elif subtype == 1:
             """furthest-from->rectangle/circle"""
-            my_obj = objects[color]
-            dist_list = [((np.subtract(pos_to_coor(my_obj.position), pos_to_coor(obj.position))) ** 2).sum() for obj in objects]
-            furthest = dist_list.index(max(dist_list))
-            if objects[furthest].shape == 'square':
-                answer = 2
-            else:
-                answer = 3
+            pass
+            #my_obj = objects[color]
+            #dist_list = [((np.subtract(pos_to_coor(my_obj.position), #pos_to_coor(obj.position))) ** 2).sum() for obj in objects]
+            #furthest = dist_list.index(max(dist_list))
+            #if objects[furthest].shape == 'square':
+            #    answer = 2
+            #else:
+            #    answer = 3
 
         elif subtype == 2:
             """count->1~6"""
@@ -182,18 +183,28 @@ def build_dataset_item():
     return dataset
 
 if __name__ == "__main__":
-    with open('../deepproblog/src/deepproblog/examples/SORTOFCLEVR/data/val/val.csv', 'w') as f:
-        writer = csv.writer(f)
-        for i in range(2000):
-            img, norelations, binary_relations = build_dataset_item()
-            questions_no_relations, answer_no_relations = norelations
-            questions_binary_relations, answer_binary_relations = binary_relations
-            array = []
-            for q in questions_no_relations:
-                array.append(q)
-            array.append(answer_no_relations)
-            for q in questions_binary_relations:
-                array.append(q)
-            array.append(answer_binary_relations)
-            cv2.imwrite('../deepproblog/src/deepproblog/examples/SORTOFCLEVR/data/val/images/' + str(i) + '.png', img)
-            writer.writerow(array)
+    for (dataset, num, seed) in [("train", 10000, 0), ("val", 2000, 1), ("test", 2000, 2)]:
+        path = '../deepproblog/src/deepproblog/examples/SORTOFCLEVR/data/' + dataset
+
+        if not os.path.exists(path + '/images'):
+            # Create a new directory because it does not exist 
+            os.makedirs(path + '/images')
+
+        random.seed(seed)
+        np.random.seed(seed)
+
+        with open(path + '/' + dataset + '.csv', 'w') as f:
+            writer = csv.writer(f)
+            for i in range(num):
+                img, norelations, binary_relations = build_dataset_item()
+                questions_no_relations, answer_no_relations = norelations
+                questions_binary_relations, answer_binary_relations = binary_relations
+                array = []
+                for q in questions_no_relations:
+                    array.append(q)
+                array.append(answer_no_relations)
+                for q in questions_binary_relations:
+                    array.append(q)
+                array.append(answer_binary_relations)
+                cv2.imwrite('../deepproblog/src/deepproblog/examples/SORTOFCLEVR/data/' + dataset + '/images/' + str(i) + '.png', img)
+                writer.writerow(array)

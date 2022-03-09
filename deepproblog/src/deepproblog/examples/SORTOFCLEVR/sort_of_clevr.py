@@ -10,7 +10,10 @@ from deepproblog.evaluate import get_confusion_matrix
 from deepproblog.train import train_model
 from deepproblog.dataset import DataLoader
 from data.data import SORTOFCLEVRDataset
+import random
 
+random.seed(0)
+#np.random.seed(args.seed)
 
 cnn_red = CNNNetwork(out_size=8)
 cnn_green = CNNNetwork(out_size=8)
@@ -29,17 +32,20 @@ model.add_tensor_source("train", train_dataset)
 model.add_tensor_source("val", val_dataset)
 model.add_tensor_source("test", test_dataset)
 model.set_engine(ExactEngine(model), cache=True)
+test_accs = []
+train_accs = []
 
 train_log = train_model(
     model,
     loader,
     1,
-    log_iter=2,
+    log_iter=1,
     #initial_test=False,
-    test_iter=3,
+    test_iter=50,
     test=lambda x: [
-        ("Val_accuracy", get_confusion_matrix(x, val_dataset, eps=1e-6).accuracy()),
+        #("Val_accuracy", get_confusion_matrix(x, val_dataset, eps=1e-6).accuracy()),
         ("Test_accuracy", get_confusion_matrix(x, test_dataset, eps=1e-6).accuracy()),
+        #("Train_accuracy", get_confusion_matrix(x, test_dataset, eps=1e-6).accuracy())
     ],
 )
 

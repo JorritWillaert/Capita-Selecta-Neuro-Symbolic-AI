@@ -19,7 +19,7 @@ width = 4
 out_size = (width ** 2) * 2 # Times two for the distinction between squares and circles
 
 colors = ["red", "green", "blue", "orange", "grey", "yellow"]
-used_colors = colors[0:width]
+used_colors = colors[0:width*2]
 cnns = {}
 for i, color in enumerate(used_colors):
     cnn = CNNNetwork(out_size=out_size)

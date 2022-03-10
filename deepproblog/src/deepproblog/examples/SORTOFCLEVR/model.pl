@@ -1,108 +1,164 @@
 % We know that there are two objects in a four grid space. Two shapes possible, two colors possible.
-% The green cnn detects the position, and the shape --> x. If x < 4: Shape = rectangle. Else: shape = circle. (x modulo 4 = position)  
+% The green cnn detects the position, and the shape --> x. If x < size: Shape = rectangle. Else: shape = circle. (x modulo size = position)  
 
-nn(cnn_red,[X],Y_red,[0,1,2,3,4,5,6,7]) :: detect_state(red, X, Y_red).
-nn(cnn_green, [X], Y_green, [0,1,2,3,4,5,6,7]) :: detect_state(green, X, Y_green).
+width(4).
+size(N) :-
+    width(Width),
+    N is Width * Width.
+states(N) :-
+    size(Size),
+    N is Size * 2.
 
+% [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32]
+nn(cnn_red,[X],Y_red, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32]) :: detect_state(red, X, Y_red).
+nn(cnn_green, [X], Y_green,  [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32]) :: detect_state(green, X, Y_green).
+nn(cnn_blue,[X],Y_blue, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32]) :: detect_state(blue, X, Y_blue).
+nn(cnn_orange, [X], Y_orange,  [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32]) :: detect_state(orange, X, Y_orange).
+
+detect_same_states(Shape, Count) :-
+    check_state(red, Return_red),
+    check_state(green, Return_green),
+    check_state(blue, Return_blue),
+    check_state(orange, Return_orange),
+    Count is Return_red + Return_green + Return_blue + Return_orange.
+
+check_state(Color, Return) :-
+    detect_state(Color, X, Y_color),
+    to_shape(Y_color, Shape_color),
+    Shape =:= Shape_color,
+    Return = 1.
+check_state(Color, Return) :-
+    detect_state(Color, X, Y_color),
+    to_shape(Y_color, Shape_color),
+    Shape =\= Shape_color,
+    Return = 0.
+
+% NON-BINARY QUESTIONS
+% Question about the shape
 red_shape(Img, Rectangle) :-
-    detect_state(red, Img, Y_red),
-    Y_red < 4,
+    shape_is_rectangle(red),
     Rectangle = 1.
 red_shape(Img, Rectangle) :-
-    detect_state(red, Img, Y_red),
-    Y_red >= 4,
+    \+ shape_is_rectangle(red),
     Rectangle = 0.
 
 green_shape(Img, Rectangle) :-
-    detect_state(green, Img, Y_green),
-    Y_green < 4, 
+    shape_is_rectangle(green),
     Rectangle = 1.
 green_shape(Img, Rectangle) :-
-    detect_state(green, Img, Y_green),
-    Y_green >= 4, 
+    \+ shape_is_rectangle(green),
     Rectangle = 0.
 
+blue_shape(Img, Rectangle) :-
+    shape_is_rectangle(blue),
+    Rectangle = 1.
+blue_shape(Img, Rectangle) :-
+    \+ shape_is_rectangle(blue)
+    Rectangle = 0.
+
+orange_shape(Img, Rectangle) :-
+    shape_is_rectangle(orange),
+    Rectangle = 1.
+orange_shape(Img, Rectangle) :-
+    \+ shape_is_rectangle(orange)
+    Rectangle = 0.
+
+shape_is_rectangle(Color) :-
+    detect_state(Color, Img, Y_color),
+    size(Size)
+    Y_color < Size.
+
+
+% Question about the horizontal side
 red_horizontal_side(Img, Left) :-
-    detect_state(red, Img, Y_red),
-    position(Y_red, Pos),
-    left_side(Pos), 
+    position_is_left(red),
     Left = 1.
 red_horizontal_side(Img, Left) :-
-    detect_state(red, Img, Y_red),
-    position(Y_red, Pos),
-    \+ left_side(Pos), 
+    \+ position_is_left(red),
     Left = 0.
 
 green_horizontal_side(Img, Left) :-
-    detect_state(green, Img, Y_green),
-    position(Y_green, Pos),
-    left_side(Pos), 
+    position_is_left(green),
     Left = 1.
 green_horizontal_side(Img, Left) :-
-    detect_state(green, Img, Y_green),
-    position(Y_green, Pos),
-    \+ left_side(Pos), 
+    \+ position_is_left(green)
     Left = 0.
 
+blue_horizontal_side(Img, Left) :-
+    position_is_left(blue),
+    Left = 1.
+blue_horizontal_side(Img, Left) :-
+    \+ position_is_left(blue)
+    Left = 0.
+
+orange_horizontal_side(Img, Left) :-
+    position_is_left(orange),
+    Left = 1.
+orange_horizontal_side(Img, Left) :-
+    \+ position_is_left(orange)
+    Left = 0.
+
+position_is_left(Color) :-
+    detect_state(Color, Img, Y_color),
+    position(Y_color, Pos),
+    left_side(Pos).
+
+
+% Question about the vertical side
 red_vertical_side(Img, Bottom) :-
-    detect_state(red, Img, Y_red),
-    position(Y_red, Pos),
-    bottom_side(Pos), 
+    position_is_bottom(red),
     Bottom = 1.
 red_vertical_side(Img, Bottom) :-
-    detect_state(red, Img, Y_red),
-    position(Y_red, Pos),
-    \+ bottom_side(Pos), 
+    \+ position_is_bottom(red),
     Bottom = 0.
 
 green_vertical_side(Img, Bottom) :-
-    detect_state(green, Img, Y_green),
-    position(Y_green, Pos),
-    bottom_side(Pos), 
+    position_is_bottom(green),
     Bottom = 1.
 green_vertical_side(Img, Bottom) :-
-    detect_state(green, Img, Y_green),
-    position(Y_green, Pos),
-    \+ bottom_side(Pos), 
+    \+ position_is_bottom(green),
     Bottom = 0.
+
+position_is_bottom(Color) :-
+    detect_state(Color, Img, Y_color),
+    position(Y_color, Pos),
+    bottom_side(Pos).
+
+
+% BINARY QUESTION
+% Question about the number of same shapes like that one
 
 % Note: Do not need red_number_of_shapes and green_number_of_shapes right now. But has been added since this will be necessary later (implementation with same_shape will have to change too though)
 red_number_of_shapes(Img, Count) :-
     detect_state(red, Img, Y_red),
-    detect_state(green, Img, Y_green),
-    same_shape(Y_red, Y_green),
-    Count = 2.
-red_number_of_shapes(Img, Count) :-
-    detect_state(red, Img, Y_red),
-    detect_state(green, Img, Y_green),
-    \+ same_shape(Y_red, Y_green),
-    Count = 1.
+    to_shape(Y_red, Shape),
+    detect_same_states(Shape, Count).
 
-green_number_of_shapes(Img, Count) :-
-    detect_state(red, Img, Y_red),
-    detect_state(green, Img, Y_green),
-    same_shape(Y_red, Y_green),
-    Count = 2.
-green_number_of_shapes(Img, Count) :-
-    detect_state(red, Img, Y_red),
-    detect_state(green, Img, Y_green),
-    \+ same_shape(Y_red, Y_green),
-    Count = 1.
+to_shape(Y_color, Shape) :-
+    size(Size)
+    Y_color < Size,
+    Shape = 0. % Shape = 0 --> Rectangle 
+to_shape(Y_color, Shape) :-
+    size(Size)
+    Y_color  >= Size,
+    Shape = 1. % Shape = 1 --> Circle
+
 
 position(Out, Pos) :-
-    Pos is Out mod 4.
+    size(Size),
+    Pos is Out mod Size.
 
 left_side(Out) :-
     to_coor(Out, X, Y),
-    X < 1.
+    width(Width),
+    X < (Width // 2).
 
 bottom_side(Out) :-
     to_coor(Out, X, Y),
-    Y >= 1. % Be careful. Y axis runs down!
+    width(Width),
+    Y >= (Width // 2). % Be careful. Y axis runs down!
 
 to_coor(Out, X, Y) :-
-    X is Out mod 2, 
-    Y is Out // 2.
-
-same_shape(Y1, Y2) :-
-    (Y1 >= 4, Y2 >= 4) ; (Y1 < 4, Y2 < 4).
+    width(Width),
+    X is Out mod Width, 
+    Y is Out // Width.

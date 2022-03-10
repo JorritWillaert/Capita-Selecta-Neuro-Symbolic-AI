@@ -40,8 +40,8 @@ train_log = train_model(
     loader,
     1,
     log_iter=3,
-    #initial_test=False,
-    test_iter=3,
+    initial_test=False,
+    test_iter=50,
     test=lambda x: [
         #("Val_accuracy", get_confusion_matrix(x, val_dataset, eps=1e-6).accuracy()),
         ("Test_accuracy", get_confusion_matrix(x, test_dataset, eps=1e-6).accuracy()),

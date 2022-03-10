@@ -16,14 +16,23 @@ random.seed(0)
 #np.random.seed(args.seed)
 
 width = 2 
+out_size = (width ** 2) * 2 # Times two for the distinction between squares and circles
 
-cnn_red = CNNNetwork(out_size=8)
-cnn_green = CNNNetwork(out_size=8)
+colors = ["red", "green", "blue", "orange", "grey", "yellow"]
+used_colors = colors[0:width]
+cnns = {}
+for i, color in enumerate(used_colors):
+    cnn = CNNNetwork(out_size=out_size)
+    cnns["cnn_" + color] = cnn
 
-net_red = Network(cnn_red, "cnn_red", Adam(cnn_red.parameters(), lr=3e-3), batching=True)
-net_green = Network(cnn_green, "cnn_green", Adam(cnn_green.parameters(), lr=3e-3), batching=True)
+nets = {}
+nets_ordered = []
+for i, color in enumerate(used_colors):
+    net = Network(cnns["cnn_" + color], "cnn_" + color, Adam(cnns["cnn_" + color].parameters(), lr=3e-3), batching=True)
+    nets["net_" + color] = net
+    nets_ordered.append(net)
 
-model = Model("/home/jorrit/Data/KU Leuven/Semester 12/Capita Selecta H05N0a/deepproblog/src/deepproblog/examples/SORTOFCLEVR/model.pl", [net_red, net_green])
+model = Model("/home/jorrit/Data/KU Leuven/Semester 12/Capita Selecta H05N0a/deepproblog/src/deepproblog/examples/SORTOFCLEVR/model.pl", nets_ordered)
 
 train_dataset = SORTOFCLEVRDataset("train", width)
 val_dataset = SORTOFCLEVRDataset("val", width)

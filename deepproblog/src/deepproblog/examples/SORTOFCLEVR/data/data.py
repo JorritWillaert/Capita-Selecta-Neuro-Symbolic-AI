@@ -34,7 +34,7 @@ class SORTOFCLEVRDataset(ImageDataset):
 
     def to_query(self, i):
         norelational_question, norelational_answer, binary_question, binary_answer = self.data[i]
-        if random.random() < 0: # Select nonbinary questions with 50% chance (TODO: set this back to 0.5)
+        if random.random() < 0.5: # Select nonbinary questions with 50% chance
             sh = None
             if norelational_question[0] == 1: # Question about red object
                 sh = "red"

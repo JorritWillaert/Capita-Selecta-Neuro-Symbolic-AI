@@ -24,6 +24,7 @@ class SORTOFCLEVRDataset(ImageDataset):
         size = str(width) + 'x' + str(width)
         self.data = []
         self.subset = subset
+        self.width = width
         with open("{}/{}/{}/{}.csv".format(path, size, subset, subset)) as f:
             for line in f:
                 norelational_question, norelational_answer, binary_question, binary_answer = \

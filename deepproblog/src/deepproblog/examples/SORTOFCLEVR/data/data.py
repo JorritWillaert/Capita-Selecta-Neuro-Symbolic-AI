@@ -38,10 +38,10 @@ class SORTOFCLEVRDataset(ImageDataset):
         norelational_question, norelational_answer, binary_question, binary_answer = self.data[i]
         if random.random() < 0.75: # Select nonbinary questions with 75% chance (three questions nonbinary / one question binary)
             sh = None
-            for i, color in enumerate(["red", "green", "blue", "orange", "grey", "yellow"]):
-                if norelational_question[i] == 1:
+            for j, color in enumerate(["red", "green", "blue", "orange", "grey", "yellow"]):
+                if norelational_question[j] == 1:
                     sh = color
-                if i == num - 1:
+                if j == num - 1:
                     break
             if sh is None:
                 print("[ERROR] No object specified")
@@ -79,10 +79,10 @@ class SORTOFCLEVRDataset(ImageDataset):
 
         else:
             sh = None
-            for i, color in enumerate(["red", "green", "blue", "orange", "grey", "yellow"]):
-                if binary_question[i] == 1: 
+            for j, color in enumerate(["red", "green", "blue", "orange", "grey", "yellow"]):
+                if binary_question[j] == 1: 
                     sh = color
-                if i == num - 1:
+                if j == num - 1:
                     break
             if sh is None:
                 print("[ERROR] No object specified")

@@ -143,8 +143,6 @@ position_is_bottom(Img, Color) :-
 
 % BINARY QUESTION
 % Question about the number of same shapes like that one
-
-% Note: Do not need red_number_of_shapes and green_number_of_shapes right now. But has been added since this will be necessary later (implementation with same_shape will have to change too though)
 red_number_of_shapes(Img, Count) :-
     detect_state(red, Img, Y_red),
     to_shape(Y_red, Shape),
@@ -154,7 +152,7 @@ green_number_of_shapes(Img, Count) :-
     to_shape(Y_green, Shape),
     detect_same_states(Shape, Img, Count).
 blue_number_of_shapes(Img, Count) :-
-    detect_state(red, Img, Y_blue),
+    detect_state(blue, Img, Y_blue),
     to_shape(Y_blue, Shape),
     detect_same_states(Shape, Img, Count).
 orange_number_of_shapes(Img, Count) :-
@@ -168,7 +166,7 @@ to_shape(Y_color, Shape) :-
     Shape = 0. % Shape = 0 --> Rectangle 
 to_shape(Y_color, Shape) :-
     size(Size),
-    Y_color  >= Size,
+    Y_color >= Size,
     Shape = 1. % Shape = 1 --> Circle
 
 

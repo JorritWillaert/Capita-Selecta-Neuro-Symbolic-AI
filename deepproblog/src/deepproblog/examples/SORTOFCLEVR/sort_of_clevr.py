@@ -15,7 +15,7 @@ import random
 random.seed(0)
 #np.random.seed(args.seed)
 
-width = 2 
+width = 4
 out_size = (width ** 2) * 2 # Times two for the distinction between squares and circles
 
 colors = ["red", "green", "blue", "orange", "grey", "yellow"]

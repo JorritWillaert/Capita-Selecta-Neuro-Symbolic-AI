@@ -9,6 +9,7 @@ import random
 random.seed(0)
 
 path = os.path.dirname(os.path.abspath(__file__))
+size = "2x2"
 
 transform = transforms.Compose(
     [transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))]
@@ -19,7 +20,7 @@ class SORTOFCLEVRDataset(ImageDataset):
         self,
         subset,
     ):
-        super().__init__("{}/{}/images".format(path, subset), transform=transform)
+        super().__init__("{}/{}}/{}/images".format(path, size, subset), transform=transform)
         self.data = []
         self.subset = subset
         with open("{}/{}/{}.csv".format(path, subset, subset)) as f:

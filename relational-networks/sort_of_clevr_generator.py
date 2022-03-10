@@ -183,8 +183,9 @@ def build_dataset_item():
     return dataset
 
 if __name__ == "__main__":
+    size = str(WIDTH) + "x" + str(WIDTH)
     for (dataset, num, seed) in [("train", 10000, 0), ("val", 2000, 1), ("test", 2000, 2)]:
-        path = '../deepproblog/src/deepproblog/examples/SORTOFCLEVR/data/' + dataset
+        path = '../deepproblog/src/deepproblog/examples/SORTOFCLEVR/data/' + size + '/' + dataset
 
         if not os.path.exists(path + '/images'):
             # Create a new directory because it does not exist 
@@ -206,5 +207,5 @@ if __name__ == "__main__":
                 for q in questions_binary_relations:
                     array.append(q)
                 array.append(answer_binary_relations)
-                cv2.imwrite('../deepproblog/src/deepproblog/examples/SORTOFCLEVR/data/' + dataset + '/images/' + str(i) + '.png', img)
+                cv2.imwrite('../deepproblog/src/deepproblog/examples/SORTOFCLEVR/data/' + size + '/' + dataset + '/images/' + str(i) + '.png', img)
                 writer.writerow(array)

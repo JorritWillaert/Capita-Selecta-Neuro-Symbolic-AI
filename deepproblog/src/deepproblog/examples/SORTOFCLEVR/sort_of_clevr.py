@@ -15,6 +15,8 @@ import random
 random.seed(0)
 #np.random.seed(args.seed)
 
+width = 2 
+
 cnn_red = CNNNetwork(out_size=8)
 cnn_green = CNNNetwork(out_size=8)
 
@@ -23,9 +25,9 @@ net_green = Network(cnn_green, "cnn_green", Adam(cnn_green.parameters(), lr=3e-3
 
 model = Model("/home/jorrit/Data/KU Leuven/Semester 12/Capita Selecta H05N0a/deepproblog/src/deepproblog/examples/SORTOFCLEVR/model.pl", [net_red, net_green])
 
-train_dataset = SORTOFCLEVRDataset("train")
-val_dataset = SORTOFCLEVRDataset("val")
-test_dataset = SORTOFCLEVRDataset("test")
+train_dataset = SORTOFCLEVRDataset("train", width)
+val_dataset = SORTOFCLEVRDataset("val", width)
+test_dataset = SORTOFCLEVRDataset("test", width)
 loader = DataLoader(train_dataset, 32, shuffle=True)
 
 model.add_tensor_source("train", train_dataset)

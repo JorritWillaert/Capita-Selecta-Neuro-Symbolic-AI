@@ -9,8 +9,6 @@ import random
 random.seed(0)
 
 path = os.path.dirname(os.path.abspath(__file__))
-num = 2
-size = str(num) + 'x' + str(num)
 
 transform = transforms.Compose(
     [transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))]
@@ -20,8 +18,10 @@ class SORTOFCLEVRDataset(ImageDataset):
     def __init__(
         self,
         subset,
+        width,
     ):
-        super().__init__("{}/{}/{}/images".format(path, size, subset), transform=transform)
+        super().__init__("{}/{}/{}/images".format(path, str(width) + 'x' + str(width), subset), transform=transform)
+        size = str(width) + 'x' + str(width)
         self.data = []
         self.subset = subset
         with open("{}/{}/{}/{}.csv".format(path, size, subset, subset)) as f:
@@ -41,16 +41,16 @@ class SORTOFCLEVRDataset(ImageDataset):
             for j, color in enumerate(["red", "green", "blue", "orange", "grey", "yellow"]):
                 if norelational_question[j] == 1:
                     sh = color
-                if j == num - 1:
+                if j == self.width - 1:
                     break
             if sh is None:
                 print("[ERROR] No object specified")
             
-            assert(norelational_question[num] == 1 and norelational_question[num + 1] == 0) # Nonbinary question
+            assert(norelational_question[self.width] == 1 and norelational_question[self.width + 1] == 0) # Nonbinary question
             
             question = None
             outcome = None
-            if norelational_question[num + 2] == 1: # Query about the shape of the object
+            if norelational_question[self.width + 2] == 1: # Query about the shape of the object
                 question = "shape"
                 if norelational_answer == 2:
                     outcome = 1 #"rectangle"
@@ -58,7 +58,7 @@ class SORTOFCLEVRDataset(ImageDataset):
                     outcome = 0 # "circle"
                 else:
                     print("[ERROR] Wrong outcome for the shape")
-            elif norelational_question[num + 3] == 1: # Query about the horizontal position
+            elif norelational_question[self.width + 3] == 1: # Query about the horizontal position
                 question = "horizontal_side"
                 if norelational_answer == 0:
                     outcome = 1 # "left"
@@ -66,7 +66,7 @@ class SORTOFCLEVRDataset(ImageDataset):
                     outcome = 0 # "right"
                 else: 
                     print("[ERROR] Wrong outcome for the horizontal position")
-            elif norelational_question[num + 4] == 1: # Query about the vertical position
+            elif norelational_question[self.width + 4] == 1: # Query about the vertical position
                 question = "vertical_side"
                 if norelational_answer == 0:
                     outcome = 1 # "bottom"
@@ -82,14 +82,14 @@ class SORTOFCLEVRDataset(ImageDataset):
             for j, color in enumerate(["red", "green", "blue", "orange", "grey", "yellow"]):
                 if binary_question[j] == 1: 
                     sh = color
-                if j == num - 1:
+                if j == self.width - 1:
                     break
             if sh is None:
                 print("[ERROR] No object specified")
             
-            assert(binary_question[num] == 0 and binary_question[num + 1] == 1) # Binary question
+            assert(binary_question[self.width] == 0 and binary_question[self.width + 1] == 1) # Binary question
             
-            assert(binary_question[num + 2] == 0 and binary_question[num + 3] == 0 and binary_question[num + 4] == 1) # Only questions about the number of these shapes of objects are allowed
+            assert(binary_question[self.width + 2] == 0 and binary_question[self.width + 3] == 0 and binary_question[self.width + 4] == 1) # Only questions about the number of these shapes of objects are allowed
 
             question = "number_of_shapes"
             assert(binary_answer >= 4)

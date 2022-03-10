@@ -39,7 +39,7 @@ class SORTOFCLEVRDataset(ImageDataset):
         if random.random() < 0.75: # Select nonbinary questions with 75% chance (three questions nonbinary / one question binary)
             sh = None
             for i, color in enumerate(["red", "green", "blue", "orange", "grey", "yellow"]):
-                if norelational_question[i] == 1: # Question about red object
+                if norelational_question[i] == 1:
                     sh = color
                 if i == num - 1:
                     break
@@ -80,7 +80,7 @@ class SORTOFCLEVRDataset(ImageDataset):
         else:
             sh = None
             for i, color in enumerate(["red", "green", "blue", "orange", "grey", "yellow"]):
-                if norelational_question[i] == 1: # Question about red object
+                if binary_question[i] == 1: 
                     sh = color
                 if i == num - 1:
                     break

@@ -19,17 +19,18 @@ parser.add_argument('--t-subtype', type=int, default=-1,
 args = parser.parse_args()
 
 IMG_SIZE = 100
-NUM_OBJECTS = 2
-WIDTH = 2
+NUM_OBJECTS = 4
+WIDTH = 4
 
 colors = [
     (0,0,255),##r
     (0,255,0),##g
-    #(255,0,0),##b
-    #(0,156,255),##o
-    #(128,128,128),##k
-    #(0,255,255)##y
+    (255,0,0),##b
+    (0,156,255),##o
+    (128,128,128),##k
+    (0,255,255)##y
 ]
+used_colors = colors[0:NUM_OBJECTS]
 
 class Object: 
     def __init__(self, color: tuple, position: int, shape: String):
@@ -37,19 +38,12 @@ class Object:
         self.position = position
         self.shape = shape
 
-size = 5
-question_size = len(colors) + 2 + 3 ## (number of colors for one-hot vector of color), 2 for question type (nonbinary VS binary), 3 for question subtype
-q_type_idx = len(colors)
-sub_q_type_idx = len(colors) + 2
+question_size = NUM_OBJECTS + 2 + 3 ## (number of colors for one-hot vector of color), 2 for question type (nonbinary VS binary), 3 for question subtype
+q_type_idx = NUM_OBJECTS
+sub_q_type_idx = NUM_OBJECTS + 2
 """Answer : [yes, no, rectangle, circle, r, g, b, o, k, y]"""
 
 nb_questions = 1
-dirs = './data'
-
-try:
-    os.makedirs(dirs)
-except:
-    print('directory {} already exists'.format(dirs))
 
 def generate_position(objects):
     while True:
@@ -72,7 +66,7 @@ def pos_to_coor(position):
 def build_one_image():
     objects = []
     img = np.ones((IMG_SIZE, IMG_SIZE, 3)) * 255
-    for color in colors:
+    for color in used_colors:
         position = generate_position(objects)
         x_coor, y_coor = pos_to_coor(position)
         if random.random()<0.5:
@@ -91,7 +85,7 @@ def build_nonrelational_questions(objects):
     nonrelational_answers = []
     for _ in range(nb_questions):
         question = np.zeros((question_size))
-        color = random.randint(0, len(colors) - 1)
+        color = random.randint(0, len(used_colors) - 1)
         question[color] = 1
         question[q_type_idx] = 1
         subtype = random.randint(0,2)
@@ -126,7 +120,7 @@ def build_binary_questions(objects):
     binary_answers = []
     for _ in range(nb_questions):
         question = np.zeros((question_size))
-        color = random.randint(0, len(colors) - 1)
+        color = random.randint(0, len(used_colors) - 1)
         question[color] = 1
         question[q_type_idx+1] = 1
         #subtype = random.randint(0,2)

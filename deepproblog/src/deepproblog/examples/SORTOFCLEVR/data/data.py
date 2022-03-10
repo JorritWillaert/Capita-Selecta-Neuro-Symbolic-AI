@@ -20,10 +20,10 @@ class SORTOFCLEVRDataset(ImageDataset):
         self,
         subset,
     ):
-        super().__init__("{}/{}}/{}/images".format(path, size, subset), transform=transform)
+        super().__init__("{}/{}/{}/images".format(path, size, subset), transform=transform)
         self.data = []
         self.subset = subset
-        with open("{}/{}/{}.csv".format(path, subset, subset)) as f:
+        with open("{}/{}/{}/{}.csv".format(path, size, subset, subset)) as f:
             for line in f:
                 norelational_question, norelational_answer, binary_question, binary_answer = \
                     [(l.rstrip('\n')[1:-1]).split() for l in line.split(",")]

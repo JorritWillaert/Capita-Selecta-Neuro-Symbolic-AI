@@ -103,11 +103,11 @@ The data generator that was used for the creation of the Sort Of CLEVR dataset h
     \end{center}
 \end{figure}
 
-Each specified color will have an object located somewhere in the grid, of which the shape can be a rectangle or a circle.
+Each specified color will have an object located somewhere in the grid, of which the shape can be a square or a circle.
 
 These images are accompanied with three non-binary questions and one binary question. For each question, a random object is chosen. The possibilities are:
 \begin{enumerate}
-    \item Non-binary - What is the shape of this object \footnote{I.e. the shape will be either a rectangle or a circle.}?
+    \item Non-binary - What is the shape of this object \footnote{I.e. the shape will be either a square or a circle.}?
     \item Non-binary - Is this object located on the left side of the image?
     \item Non-binary - Is this object located on the bottom side of the image?
     \item Binary - How many objects have the same shape of this object?
@@ -116,9 +116,13 @@ These images are accompanied with three non-binary questions and one binary ques
 These questions are encoded in a one-hot encoding, after which they are stored in a CSV file, along with the expected answers. A training set, a validation set, and a test set are generated. % Validation set useful?
 
 \subsection{Logical rule encodings}
+% TODO optimizations in these logical rule encodings? Possible to change e.g. red_number_of_shapes(...) into number_of_shapes(red, ...)?
 
 \subsection{Controlling the training process}
+The overall training process is controlled via the Python interfaces of DeepProbLog, along with general PyTorch implementations of the CNN's.
+First of all, CNN's are defined with PyTorch. A relatively simple network is used, where the input is given as a square RGB image of 100 pixels wide, which is transformed by the CNN into 72 output features for the 6x6 grid. Each color that is present in the image has its accompanied CNN network, hence the 72 output features encode the possible positions of the object with that color, along with their shape, which can be either square or circular ($6 \cdot 6 \cdot 2 = 72$).
 
+The final thing required before commencing the training process, are the data loaders. The most challenging part here is the transformation from the generated data to specific query mappings and their outcome. One of the questions are chosen, and a correct mapping between a predicate in the logical rule encoding file and the answer is set up.
 
 \section{EXPERIMENTS}
 

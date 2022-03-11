@@ -41,46 +41,11 @@ check_state(Color, Shape, Img, Return) :-
 
 % NON-BINARY QUESTIONS
 % Question about the shape
-red_shape(Img, Rectangle) :-
-    shape_is_rectangle(Img, red),
+shape(Img, Color, Rectangle) :-
+    shape_is_rectangle(Img, Color),
     Rectangle = 1.
-red_shape(Img, Rectangle) :-
-    \+ shape_is_rectangle(Img, red),
-    Rectangle = 0.
-
-green_shape(Img, Rectangle) :-
-    shape_is_rectangle(Img, green),
-    Rectangle = 1.
-green_shape(Img, Rectangle) :-
-    \+ shape_is_rectangle(Img, green),
-    Rectangle = 0.
-
-blue_shape(Img, Rectangle) :-
-    shape_is_rectangle(Img, blue),
-    Rectangle = 1.
-blue_shape(Img, Rectangle) :-
-    \+ shape_is_rectangle(Img, blue),
-    Rectangle = 0.
-
-orange_shape(Img, Rectangle) :-
-    shape_is_rectangle(Img, orange),
-    Rectangle = 1.
-orange_shape(Img, Rectangle) :-
-    \+ shape_is_rectangle(Img, orange),
-    Rectangle = 0.
-
-grey_shape(Img, Rectangle) :-
-    shape_is_rectangle(Img, grey),
-    Rectangle = 1.
-grey_shape(Img, Rectangle) :-
-    \+ shape_is_rectangle(Img, grey),
-    Rectangle = 0.
-
-yellow_shape(Img, Rectangle) :-
-    shape_is_rectangle(Img, yellow),
-    Rectangle = 1.
-yellow_shape(Img, Rectangle) :-
-    \+ shape_is_rectangle(Img, yellow),
+shape(Img, Color, Rectangle) :-
+    \+ shape_is_rectangle(Img, Color),
     Rectangle = 0.
 
 shape_is_rectangle(Img, Color) :-
@@ -88,48 +53,12 @@ shape_is_rectangle(Img, Color) :-
     size(Size),
     Y_color < Size.
 
-
 % Question about the horizontal side
-red_horizontal_side(Img, Left) :-
-    position_is_left(Img, red),
+horizontal_side(Img, Color, Left) :-
+    position_is_left(Img, Color),
     Left = 1.
-red_horizontal_side(Img, Left) :-
-    \+ position_is_left(Img, red),
-    Left = 0.
-
-green_horizontal_side(Img, Left) :-
-    position_is_left(Img, green),
-    Left = 1.
-green_horizontal_side(Img, Left) :-
-    \+ position_is_left(Img, green),
-    Left = 0.
-
-blue_horizontal_side(Img, Left) :-
-    position_is_left(Img, blue),
-    Left = 1.
-blue_horizontal_side(Img, Left) :-
-    \+ position_is_left(Img, blue),
-    Left = 0.
-
-orange_horizontal_side(Img, Left) :-
-    position_is_left(Img, orange),
-    Left = 1.
-orange_horizontal_side(Img, Left) :-
-    \+ position_is_left(Img, orange),
-    Left = 0.
-
-grey_horizontal_side(Img, Left) :-
-    position_is_left(Img, grey),
-    Left = 1.
-grey_horizontal_side(Img, Left) :-
-    \+ position_is_left(Img, grey),
-    Left = 0.
-
-yellow_horizontal_side(Img, Left) :-
-    position_is_left(Img, yellow),
-    Left = 1.
-yellow_horizontal_side(Img, Left) :-
-    \+ position_is_left(Img, yellow),
+horizontal_side(Img, Color, Left) :-
+    \+ position_is_left(Img, Color),
     Left = 0.
 
 position_is_left(Img, Color) :-
@@ -137,48 +66,12 @@ position_is_left(Img, Color) :-
     position(Y_color, Pos),
     left_side(Pos).
 
-
 % Question about the vertical side
-red_vertical_side(Img, Bottom) :-
-    position_is_bottom(Img, red),
+vertical_side(Img, Color, Bottom) :-
+    position_is_bottom(Img, Color),
     Bottom = 1.
-red_vertical_side(Img, Bottom) :-
-    \+ position_is_bottom(Img, red),
-    Bottom = 0.
-
-green_vertical_side(Img, Bottom) :-
-    position_is_bottom(Img, green),
-    Bottom = 1.
-green_vertical_side(Img, Bottom) :-
-    \+ position_is_bottom(Img, green),
-    Bottom = 0.
-
-blue_vertical_side(Img, Bottom) :-
-    position_is_bottom(Img, blue),
-    Bottom = 1.
-blue_vertical_side(Img, Bottom) :-
-    \+ position_is_bottom(Img, blue),
-    Bottom = 0.
-
-orange_vertical_side(Img, Bottom) :-
-    position_is_bottom(Img, orange),
-    Bottom = 1.
-orange_vertical_side(Img, Bottom) :-
-    \+ position_is_bottom(Img, orange),
-    Bottom = 0.
-
-grey_vertical_side(Img, Bottom) :-
-    position_is_bottom(Img, grey),
-    Bottom = 1.
-grey_vertical_side(Img, Bottom) :-
-    \+ position_is_bottom(Img, grey),
-    Bottom = 0.
-
-yellow_vertical_side(Img, Bottom) :-
-    position_is_bottom(Img, yellow),
-    Bottom = 1.
-yellow_vertical_side(Img, Bottom) :-
-    \+ position_is_bottom(Img, yellow),
+vertical_side(Img, Color, Bottom) :-
+    \+ position_is_bottom(Img, Color),
     Bottom = 0.
 
 position_is_bottom(Img, Color) :-
@@ -189,29 +82,9 @@ position_is_bottom(Img, Color) :-
 
 % BINARY QUESTION
 % Question about the number of same shapes like that one
-red_number_of_shapes(Img, Count) :-
-    detect_state(red, Img, Y_red),
+number_of_shapes(Img, Color, Count) :-
+    detect_state(Color, Img, Y_red),
     to_shape(Y_red, Shape),
-    detect_same_states(Shape, Img, Count).
-green_number_of_shapes(Img, Count) :-
-    detect_state(green, Img, Y_green),
-    to_shape(Y_green, Shape),
-    detect_same_states(Shape, Img, Count).
-blue_number_of_shapes(Img, Count) :-
-    detect_state(blue, Img, Y_blue),
-    to_shape(Y_blue, Shape),
-    detect_same_states(Shape, Img, Count).
-orange_number_of_shapes(Img, Count) :-
-    detect_state(orange, Img, Y_orange),
-    to_shape(Y_orange, Shape),
-    detect_same_states(Shape, Img, Count).
-grey_number_of_shapes(Img, Count) :-
-    detect_state(grey, Img, Y_grey),
-    to_shape(Y_grey, Shape),
-    detect_same_states(Shape, Img, Count).
-yellow_number_of_shapes(Img, Count) :-
-    detect_state(yellow, Img, Y_yellow),
-    to_shape(Y_yellow, Shape),    
     detect_same_states(Shape, Img, Count).
 
 to_shape(Y_color, Shape) :-

@@ -19,8 +19,8 @@ parser.add_argument('--t-subtype', type=int, default=-1,
 args = parser.parse_args()
 
 IMG_SIZE = 100
-NUM_OBJECTS = 4
-WIDTH = 4
+NUM_OBJECTS = 6
+WIDTH = 6
 
 colors = [
     (0,0,255),##r
@@ -178,7 +178,7 @@ def build_dataset_item():
 
 if __name__ == "__main__":
     size = str(WIDTH) + "x" + str(WIDTH)
-    for (dataset, num, seed) in [("train", 10000, 0), ("val", 2000, 1), ("test", 2000, 2)]:
+    for (dataset, num, seed) in [("train", 10000, 0), ("val", 500, 1), ("test", 500, 2)]:
         path = '../deepproblog/src/deepproblog/examples/SORTOFCLEVR/data/' + size + '/' + dataset
 
         if not os.path.exists(path + '/images'):

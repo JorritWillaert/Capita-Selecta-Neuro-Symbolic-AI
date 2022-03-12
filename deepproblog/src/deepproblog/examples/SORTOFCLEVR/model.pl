@@ -1,6 +1,8 @@
 % We know that there are two objects in a four grid space. Two shapes possible, two colors possible.
 % The green cnn detects the position, and the shape --> x. If x < size: Shape = rectangle. Else: shape = circle. (x modulo size = position)  
 
+:- use_module(library(cut)).
+
 width(6).
 size(N) :-
     width(Width),
@@ -29,23 +31,23 @@ detect_same_states(Shape, Img, Count) :-
     Count is Return_red + Return_green + Return_blue + Return_orange + Return_grey + Return_yellow.
 
 check_state(Color, Shape, Img, Return) :-
+    cut(check_state_with_cut(Color, Shape, Img, Return)).
+check_state_with_cut(1, Color, Shape, Img, Return) :-
     detect_state(Color, Img, Y_color),
     to_shape(Y_color, Shape_color),
     Shape =:= Shape_color,
     Return = 1.
-check_state(Color, Shape, Img, Return) :-
-    detect_state(Color, Img, Y_color),
-    to_shape(Y_color, Shape_color),
-    Shape =\= Shape_color,
+check_state_with_cut(2, Color, Shape, Img, Return) :-
     Return = 0.
 
 % NON-BINARY QUESTIONS
 % Question about the shape
 shape(Img, Color, Rectangle) :-
+    cut(shape_with_cut(Img, Color, Rectangle)).
+shape_with_cut(1, Img, Color, Rectangle) :-
     shape_is_rectangle(Img, Color),
     Rectangle = 1.
-shape(Img, Color, Rectangle) :-
-    \+ shape_is_rectangle(Img, Color),
+shape_with_cut(2, Img, Color, Rectangle) :-
     Rectangle = 0.
 
 shape_is_rectangle(Img, Color) :-
@@ -55,10 +57,11 @@ shape_is_rectangle(Img, Color) :-
 
 % Question about the horizontal side
 horizontal_side(Img, Color, Left) :-
+    cut(horizontal_side_with_cut(Img, Color, Left)).
+horizontal_side_with_cut(1, Img, Color, Left) :-
     position_is_left(Img, Color),
     Left = 1.
-horizontal_side(Img, Color, Left) :-
-    \+ position_is_left(Img, Color),
+horizontal_side_with_cut(2, Img, Color, Left) :-
     Left = 0.
 
 position_is_left(Img, Color) :-
@@ -68,10 +71,11 @@ position_is_left(Img, Color) :-
 
 % Question about the vertical side
 vertical_side(Img, Color, Bottom) :-
+    cut(vertical_side_with_cut(Img, Color, Bottom)).
+vertical_side_with_cut(1, Img, Color, Bottom) :-
     position_is_bottom(Img, Color),
     Bottom = 1.
-vertical_side(Img, Color, Bottom) :-
-    \+ position_is_bottom(Img, Color),
+vertical_side_with_cut(2, Img, Color, Bottom) :-
     Bottom = 0.
 
 position_is_bottom(Img, Color) :-
@@ -88,12 +92,12 @@ number_of_shapes(Img, Color, Count) :-
     detect_same_states(Shape, Img, Count).
 
 to_shape(Y_color, Shape) :-
+    cut(to_shape_with_cut(Y_color, Shape)).
+to_shape_with_cut(1, Y_color, Shape) :-
     size(Size),
     Y_color < Size,
     Shape = 0. % Shape = 0 --> Rectangle 
-to_shape(Y_color, Shape) :-
-    size(Size),
-    Y_color >= Size,
+to_shape_with_cut(2, Y_color, Shape) :-
     Shape = 1. % Shape = 1 --> Circle
 
 

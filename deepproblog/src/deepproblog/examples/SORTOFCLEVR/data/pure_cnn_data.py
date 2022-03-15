@@ -47,6 +47,6 @@ class Pure_CNN_Data(Dataset):
                 img = self.transform(img)
         norelational_question, norelational_answer, binary_question, binary_answer = self.data[idx]
         if random.random() < 0.75:
-            return img, norelational_question, norelational_answer
+            return img, torch.FloatTensor(norelational_question), norelational_answer
         else:
-            return img, binary_question, binary_answer
+            return img, torch.FloatTensor(binary_question), binary_answer

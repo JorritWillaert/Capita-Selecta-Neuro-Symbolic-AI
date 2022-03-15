@@ -56,11 +56,11 @@ class Combine(nn.Module):
         return r
 
 class PureCNN(nn.Module):
-    def __init__(self, output_size):
+    def __init__(self, size, output_size):
         super().__init__()
-        self.cnn_net = CNNNetwork(out_size=(6 **2) * 2)
-        self.mlp = MLP(input_size=6 + 2 + 3, out_size=16) # Input size = (number of colors for one-hot vector of color), 2 for question type (nonbinary VS binary), 3 for question subtype
-        self.combine = Combine((6 **2) * 2, 16, output_size)
+        self.cnn_net = CNNNetwork(out_size=(size **2) * 2)
+        self.mlp = MLP(input_size=size + 2 + 3, out_size=16) # Input size = (number of colors for one-hot vector of color), 2 for question type (nonbinary VS binary), 3 for question subtype
+        self.combine = Combine((size **2) * 2, 16, output_size)
 
     def forward(self, img, question):
         out_cnn = self.cnn_net(img)

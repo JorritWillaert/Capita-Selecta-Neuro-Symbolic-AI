@@ -1,7 +1,7 @@
 import pickle
 import cv2
 import matplotlib.pyplot as plt
-with open('values_of_training_16_03_2022_12_00.pk', 'rb') as fp:
+with open('values_of_training_16_03_2022_13_00_6x6_100_epochs.pk', 'rb') as fp:
     train_loss = pickle.load(fp)
     test_loss = pickle.load(fp)
     epoch_accs = pickle.load(fp)
@@ -37,6 +37,6 @@ ax1.tick_params(axis='y', colors="b")
 leg = lns1 + lns2 + lns3
 labs = [l.get_label() for l in leg]
 ax1.legend(leg, labs, loc=0)
-plt.savefig("plots/pure_cnn_loss_and_acc_2x2.png")
+plt.savefig("plots/pure_cnn_loss_and_acc_6x6_100_epochs.png")
 
 print("Total training time: " + str(times[-1]))

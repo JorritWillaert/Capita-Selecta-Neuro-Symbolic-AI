@@ -15,7 +15,7 @@ import random
 random.seed(0)
 #np.random.seed(args.seed)
 
-width = 6
+width = 2
 out_size = (width ** 2) * 2 # Times two for the distinction between squares and circles
 
 colors = ["red", "green", "blue", "orange", "grey", "yellow"]
@@ -25,9 +25,14 @@ for i, color in enumerate(used_colors):
     cnn = CNNNetwork(out_size=out_size)
     cnns["cnn_" + color] = cnn
 
+# Hove to add these networks in order to work well
+if width < 6:
+    for color in (list(set(colors) - set(used_colors))):
+        cnns["cnn_" + color] = cnn
+
 nets = {}
 nets_ordered = []
-for i, color in enumerate(used_colors):
+for i, color in enumerate(colors):
     net = Network(cnns["cnn_" + color], "cnn_" + color, Adam(cnns["cnn_" + color].parameters(), lr=3e-3), batching=True)
     nets["net_" + color] = net
     nets_ordered.append(net)

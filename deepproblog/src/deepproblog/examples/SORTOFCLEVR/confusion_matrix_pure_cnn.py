@@ -21,7 +21,7 @@ test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True)
 y_pred = []
 y_true = []
 
-network.load_state_dict(torch.load("models/sort_of_clevr_220316_114813087345.pt"))
+network.load_state_dict(torch.load("models/model_pure_NN_6x6_100_iterations_16_03_2022.pt"))
 network.eval()
 # iterate over test data
 for (img, questions, answer) in test_loader:
@@ -42,4 +42,4 @@ df_cm = pd.DataFrame(cf_matrix/np.sum(cf_matrix), index = [i for i in classes],
                      columns = [i for i in classes])
 plt.figure(figsize = (12,7))
 sn.heatmap(df_cm, annot=True)
-plt.savefig('plots/confusion_matrix_6x6.png')
+plt.savefig('plots/confusion_matrix_6x6_100_iterations.png')

@@ -123,11 +123,11 @@ loss_function.to(device)
 
 optimizer = torch.optim.Adam(network.parameters(), lr = 3e-4)
 
-epochs = 25
+epochs = 100
 train_loss, test_loss, epoch_accs, times = train(network, train_loader, test_loader, loss_function, optimizer, epochs, accuracy_metric, batch_size)
 import pickle
 
-with open('values_of_training_16_03_2022_12_40_6x6.pk', 'wb') as fp:
+with open('values_of_training_16_03_2022_13_00_6x6_100_epochs.pk', 'wb') as fp:
     pickle.dump(train_loss, fp)
     pickle.dump(test_loss, fp)
     pickle.dump(epoch_accs, fp)

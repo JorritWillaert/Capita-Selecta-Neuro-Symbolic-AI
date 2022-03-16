@@ -1,11 +1,13 @@
 from random import weibullvariate
 from this import d
+from turtle import st
 from data.pure_cnn_data import Pure_CNN_Data
 from network_for_pure_CNN import PureCNN
 from torch.utils.data import DataLoader
 import torch
 from deepproblog.utils import format_time_precise
 from torch import nn, tensor
+import time
 
 # Check if GPU is available
 device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -18,7 +20,9 @@ def accuracy_metric(predictions, expected):
 from torch.nn.modules.activation import Softmax
 def train(model, train_dl, val_dl, loss_function, optimizer, epochs=10, accuracy_metric=None, batch_size=8):
 
-    train_loss, val_loss = [], []
+    train_loss, val_loss, epoch_accs, times = [], [], [], []
+    start_time = time.time()
+    times.append(0)
      
     # Optimization loop
     for epoch in range(epochs):
@@ -39,7 +43,7 @@ def train(model, train_dl, val_dl, loss_function, optimizer, epochs=10, accuracy
                 if phase == 'train':
                     outputs = model(img, questions)
                     loss = loss_function(outputs, answer.long())
-                    train_loss.append(loss)
+                    #train_loss.append(loss)
                     
                     # Backpropagation
                     optimizer.zero_grad() # Needed because backprop accumulates the gradients on subsequent passes
@@ -50,7 +54,7 @@ def train(model, train_dl, val_dl, loss_function, optimizer, epochs=10, accuracy
                     with torch.no_grad(): # disable grad tracking for faster model evaluation
                         outputs = model(img, questions)
                         loss = loss_function(outputs, answer.long())
-                        val_loss.append(loss)
+                        #val_loss.append(loss)
                         acc = accuracy_metric(outputs, answer) #Use self-defined accuracy metric
                         actual_acc += acc
                     
@@ -68,13 +72,20 @@ def train(model, train_dl, val_dl, loss_function, optimizer, epochs=10, accuracy
             # Normalize    
             epoch_loss = actual_loss / len(dataloader.dataset)
             epoch_acc = actual_acc / len(dataloader.dataset)
+            if phase == "val":
+                print(epoch_acc)
+                epoch_accs.append(epoch_acc)
+                val_loss.append(epoch_loss)
+            else:
+                train_loss.append(epoch_loss)
+            times.append(time.time() - start_time)
             
             print("Phase: " + str(phase) + ", epoch loss: " + str(epoch_loss) + ", epoch accuracy: " + str(epoch_acc))
     
     name = "sort_of_clevr_" + format_time_precise()
     torch.save(model.state_dict(), 'models/' + name + '.pt')
     print("Training complete")
-    return train_loss, val_loss
+    return train_loss, val_loss, epoch_accs, times
 
 def init_weights(m):
     if isinstance(m, (nn.Linear, nn.Conv2d)):
@@ -112,5 +123,12 @@ loss_function.to(device)
 
 optimizer = torch.optim.Adam(network.parameters(), lr = 3e-4)
 
-epochs = 20
-train_loss, test_loss = train(network, train_loader, test_loader, loss_function, optimizer, epochs, accuracy_metric, batch_size)
+epochs = 25
+train_loss, test_loss, epoch_accs, times = train(network, train_loader, test_loader, loss_function, optimizer, epochs, accuracy_metric, batch_size)
+import pickle
+
+with open('values_of_training_16_03_2022_12_00.pk', 'wb') as fp:
+    pickle.dump(train_loss, fp)
+    pickle.dump(test_loss, fp)
+    pickle.dump(epoch_accs, fp)
+    pickle.dump(times, fp)

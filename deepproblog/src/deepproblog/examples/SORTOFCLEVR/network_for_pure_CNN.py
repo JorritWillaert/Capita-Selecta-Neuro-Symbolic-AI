@@ -10,15 +10,16 @@ class CNNNetwork(nn.Module):
         self.convolutions = nn.Sequential(
             nn.Conv2d(3, 6, 5, stride=2),
             nn.ReLU(),
+            #nn.BatchNorm2d(6),
             nn.MaxPool2d(2),
             #nn.Conv2d(6, 16, 3, stride=1, padding=1),
             #nn.ReLU(),
             #nn.MaxPool2d(2),
-            nn.Dropout2d(0.4),
+            #nn.Dropout2d(0.4),
         )
 
         self.mlp = nn.Sequential(
-            nn.LazyLinear(out_size), # Square and red, square and green, circle and red, circle and green
+            nn.LazyLinear(out_size),
             #nn.Softmax(dim=1)
             # nn.Dropout2d(0.8)
         )
@@ -42,7 +43,7 @@ class MLP(nn.Module):
             #nn.BatchNorm1d(num_features=8),
             nn.Dropout(prob),
             nn.Linear(8, out_size),
-            nn.Softmax(dim=1),
+            #nn.Softmax(dim=1),
             #nn.ReLU(),
             #nn.BatchNorm1d(num_features=out_size),
             nn.Dropout(prob),

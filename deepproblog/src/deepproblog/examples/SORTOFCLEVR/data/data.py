@@ -96,6 +96,7 @@ class SORTOFCLEVRDataset(ImageDataset):
             assert(binary_answer >= 4)
             outcome = binary_answer - 3
         sub = {Term("image"): Term("tensor", Term(self.subset, Constant(i)))}
+        #question = sh + "_" + question
         return Query(Term(question, Term("image"), Term(sh), Constant(outcome)), sub)
            
     def __len__(self):

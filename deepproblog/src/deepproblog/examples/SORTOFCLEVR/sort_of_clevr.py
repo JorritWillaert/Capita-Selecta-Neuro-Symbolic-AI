@@ -21,18 +21,13 @@ out_size = (width ** 2) * 2 # Times two for the distinction between squares and 
 colors = ["red", "green", "blue", "orange", "grey", "yellow"]
 used_colors = colors[0:width]
 cnns = {}
-for i, color in enumerate(used_colors):
+for color in colors:
     cnn = CNNNetwork(out_size=out_size)
     cnns["cnn_" + color] = cnn
 
-# Hove to add these networks in order to work well
-if width < 6:
-    for color in (list(set(colors) - set(used_colors))):
-        cnns["cnn_" + color] = cnn
-
 nets = {}
 nets_ordered = []
-for i, color in enumerate(colors):
+for color in colors:
     net = Network(cnns["cnn_" + color], "cnn_" + color, Adam(cnns["cnn_" + color].parameters(), lr=3e-3), batching=True)
     nets["net_" + color] = net
     nets_ordered.append(net)
@@ -57,7 +52,7 @@ train_log = train_model(
     1,
     log_iter=1,
     initial_test=False,
-    test_iter=1,
+    test_iter=20,
     test=lambda x: [
         #("Val_accuracy", get_confusion_matrix(x, val_dataset, eps=1e-6).accuracy()),
         ("Test_accuracy", get_confusion_matrix(x, test_dataset, eps=1e-6).accuracy()),

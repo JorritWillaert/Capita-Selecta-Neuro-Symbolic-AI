@@ -3,7 +3,7 @@ import torch
 from torch import nn
 import numpy as np
 
-prob = 0.0
+prob = 0.1
 class CNNNetwork(nn.Module):
     def __init__(self, out_size):
         super(CNNNetwork, self).__init__()

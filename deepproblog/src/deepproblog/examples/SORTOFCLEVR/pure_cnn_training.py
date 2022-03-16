@@ -12,9 +12,7 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"Using {device} device")
 
 def accuracy_metric(predictions, expected):
-    print(predictions)
     pred = torch.argmax(predictions, dim=1) # Indices of the max value of all elements -> 0 if "no" has highest probability, 1 if "yes"
-    print(pred, expected)
     return torch.sum(pred == expected).item()
 
 from torch.nn.modules.activation import Softmax
@@ -114,5 +112,5 @@ loss_function.to(device)
 
 optimizer = torch.optim.Adam(network.parameters(), lr = 3e-4)
 
-epochs = 2000
+epochs = 20
 train_loss, test_loss = train(network, train_loader, test_loader, loss_function, optimizer, epochs, accuracy_metric, batch_size)

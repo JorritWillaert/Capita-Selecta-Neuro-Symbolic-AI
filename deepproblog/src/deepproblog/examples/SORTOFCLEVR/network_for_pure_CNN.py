@@ -3,6 +3,7 @@ import torch
 from torch import nn
 import numpy as np
 
+prob = 0.0
 class CNNNetwork(nn.Module):
     def __init__(self, out_size):
         super(CNNNetwork, self).__init__()
@@ -18,7 +19,7 @@ class CNNNetwork(nn.Module):
 
         self.mlp = nn.Sequential(
             nn.LazyLinear(out_size), # Square and red, square and green, circle and red, circle and green
-            nn.Softmax(dim=1)
+            #nn.Softmax(dim=1)
             # nn.Dropout2d(0.8)
         )
 
@@ -31,29 +32,46 @@ class CNNNetwork(nn.Module):
 class MLP(nn.Module):
     def __init__(self, input_size, out_size): # Input size = (number of colors for one-hot vector of color), 2 for question type (nonbinary VS binary), 3 for question subtype
         super().__init__()
-        self.layer1 = nn.Linear(input_size, 16)
-        self.layer2 = nn.Linear(16, 8)
-        self.layer3 = nn.Linear(8, out_size)
+        self.net = nn.Sequential(
+            nn.Linear(input_size, 16),
+            nn.ReLU(),
+            #nn.BatchNorm1d(num_features=16),
+            nn.Dropout(prob),
+            nn.Linear(16, 8),
+            nn.ReLU(),
+            #nn.BatchNorm1d(num_features=8),
+            nn.Dropout(prob),
+            nn.Linear(8, out_size),
+            nn.Softmax(dim=1),
+            #nn.ReLU(),
+            #nn.BatchNorm1d(num_features=out_size),
+            nn.Dropout(prob),
+        )
 
     def forward(self, x):
-        y = self.layer1(x)
-        z = self.layer2(y)
-        q = self.layer3(z)
-        return q
+        return self.net(x)
 
 class Combine(nn.Module):
     def __init__(self, input_size_image, input_size_MLP, out_size):
         super().__init__()
-        self.layer1 = nn.Linear(input_size_image + input_size_MLP, 128)
-        self.layer2 = nn.Linear(128, 32)
-        self.layer3 = nn.Linear(32, out_size)
+        self.net = nn.Sequential(
+            nn.Linear(input_size_image + input_size_MLP, 128),
+            nn.ReLU(),
+            #nn.BatchNorm1d(num_features=128),
+            nn.Dropout(prob),
+            nn.Linear(128, 32),
+            nn.ReLU(),
+            #nn.BatchNorm1d(num_features=32),
+            nn.Dropout(prob),
+            nn.Linear(32, out_size),
+            #nn.ReLU(),
+            #nn.BatchNorm1d(num_features=out_size),
+            nn.Dropout(prob),
+        )
     
     def forward(self, x1, x2):
-        y = torch.cat((x1, x2), dim=1)
-        z = self.layer1(y)
-        q = self.layer2(z)
-        r = self.layer3(q)
-        return r
+        x3 = torch.cat((x1, x2), dim=1)
+        return self.net(x3)
 
 class PureCNN(nn.Module):
     def __init__(self, size, output_size):

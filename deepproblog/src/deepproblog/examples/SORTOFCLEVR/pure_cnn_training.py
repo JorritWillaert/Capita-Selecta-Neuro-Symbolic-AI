@@ -12,7 +12,9 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"Using {device} device")
 
 def accuracy_metric(predictions, expected):
+    print(predictions)
     pred = torch.argmax(predictions, dim=1) # Indices of the max value of all elements -> 0 if "no" has highest probability, 1 if "yes"
+    print(pred, expected)
     return torch.sum(pred == expected).item()
 
 from torch.nn.modules.activation import Softmax
@@ -76,6 +78,11 @@ def train(model, train_dl, val_dl, loss_function, optimizer, epochs=10, accuracy
     print("Training complete")
     return train_loss, val_loss
 
+def init_weights(m):
+    if isinstance(m, (nn.Linear, nn.Conv2d)):
+        torch.nn.init.xavier_uniform(m.weight)
+        m.bias.data.fill_(0.01)
+   
 size = 2
 output_size = 4 + size
 network = PureCNN(size=size, output_size=output_size) # Yes, no, square, circle, 1, 2, 3, 4, 5, 6
@@ -86,13 +93,19 @@ batch_size = 8
 train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
 test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True)
 
+for (img, questions, answer) in train_loader:
+    network(img, questions)
+network.apply(init_weights)
+
 freq_number = 1 / (4 * size)
 freqs = [1/8, 1/8, 1/4, 1/4]
 for i in range(size):
     freqs.append(freq_number)
 freqs = torch.FloatTensor(freqs)
 weights = 1 / freqs
-weights = torch.sum(weights) / weights
+print(weights)
+weights = weights / torch.sum(weights)
+print(weights)
 # Chance on shape = 1/4, answer = rectangle or shape. So freq is 1/8
 # Chance on horizontal or vertical = 1/2, answer = yes or no. So freq is 1/2
 # Chance on number of objects = 1/4, answer = 1, 2, 3, 4, 5 or 6. So freq is 1 / (4 * 6)
@@ -101,5 +114,5 @@ loss_function.to(device)
 
 optimizer = torch.optim.Adam(network.parameters(), lr = 3e-4)
 
-epochs = 20
+epochs = 2000
 train_loss, test_loss = train(network, train_loader, test_loader, loss_function, optimizer, epochs, accuracy_metric, batch_size)

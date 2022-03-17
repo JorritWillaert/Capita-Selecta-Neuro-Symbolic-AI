@@ -44,7 +44,6 @@ model.add_tensor_source("test", test_dataset)
 model.set_engine(ExactEngine(model), cache=True)
 model.eval()
 
-
 y_pred, y_true = [], []
 for i, gt_query in enumerate(test_dataset.to_queries()):
     test_query = gt_query.variable_output()
@@ -79,4 +78,4 @@ df_cm = pd.DataFrame(cf_matrix/np.sum(cf_matrix), index = [i for i in classes],
                      columns = [i for i in classes])
 plt.figure(figsize = (12,7))
 sn.heatmap(df_cm, annot=True)
-plt.savefig('plots/confusion_matrix_2x2_deepproblog.png')
+plt.savefig('plots/model_deepproblog_2x2.png')

@@ -96,7 +96,7 @@ The data generator that was used for the creation of the Sort Of CLEVR dataset h
 
 \begin{figure}[H]
     \begin{center}
-    %\includegraphics[width=0.3\textwidth]{sample_own_dataset.png} TODO
+    \includegraphics[width=0.3\textwidth]{sample_image_dataset.png}
     \captionsetup{justification=centering}
     \caption{A sample image from the dataset that has been used for this application}
     \label{fig:sample_image_own_dataset}
@@ -128,7 +128,16 @@ Once the CNN belonging to a specific color has determined the position and the s
 
 \subsection{COMPARISONS WITH PURE SYSTEM 1 APPROACHES}
 \label{comparison_with_CNN}
-The network based on pure neural predicates is able to recognize the questions quickly, however, seems to experience difficulties when having to decide for the correct answer. This can clearly be seen in the confusion matrix. % TODO add confusion_matrix_pure_NN_6x6_clear_mistakes here
+The network based on pure neural predicates is able to recognize the questions quickly, however, seems to experience difficulties when having to decide for the correct answer. This can clearly be seen in the confusion matrix (Figure \ref{fig:confusion_matrix_6x6_pure_NN}). % TODO add confusion_matrix_pure_NN_6x6_clear_mistakes here
+
+\begin{figure}[H]
+    \begin{center}
+    \includegraphics[width=0.3\textwidth]{confusion_matrix_pure_NN_6x6_clear_mistakes.png} 
+    \captionsetup{justification=centering}
+    \caption{The confusion matrix of the 6x6 dataset on a purely Neural Network based model}
+    \label{fig:confusion_matrix_6x6_pure_NN}
+    \end{center}
+\end{figure}
 
 \section{APPENDIX}
 \subsection{Logical rule encodings}

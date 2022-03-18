@@ -20,11 +20,13 @@
 \end{keywords}
 
 \section{INTRODUCTION}
-The Neuro Symbolic AI community is growing rapidly, indicating that people start to recognize the value of the field. The Neuro Symbolic AI field is interested in building a bridge between the robustness of probabilistic knowledge, with the well-known popularity and proven strengths of deep neural networks. DeepProbLog \cite{deepproblog} offers this ability, by using both the strengths of neural networks (i.e. system 1, typical subconscious tasks such as visual recognition, the processing of languages, \dots), along with the strengths of rule-based probabilistic systems (i.e. system 2, slow, sequential thinking such as the derivation of a proof). 
+The Neuro Symbolic AI field is interested in building a bridge between the robustness of probabilistic knowledge, with the well-known popularity and proven strengths of deep neural networks. DeepProbLog \cite{deepproblog} offers this ability, by using both the strengths of neural networks (i.e. system 1, typical subconscious tasks such as visual recognition, the processing of languages, \dots), along with the strengths of rule-based probabilistic systems (i.e. system 2, slow, sequential thinking such as the derivation of a proof). 
 
-This paper elaborates on an application that requires both systems to be used, namely Visual Question Answering. System 1 will be required in order to gain an understanding of the image under investigation, with in particular their shapes and colors. System 2, on the other hand, will use this extracted information for deriving certain properties of objects\footnote{For example, finding the shape of the green object, or deriving if it is located on the left hand side of the image.}, or even for capturing the relations\footnote{Here, one could think of deriving if an object is located to the left of another object, or also for finding the number of circles in the image.} between the objects. 
+This paper elaborates on an application that requires both systems to be used, namely Visual Question Answering. System 1 will be required in order to gain an understanding of the image under investigation, with in particular their shapes and colors. System 2, on the other hand, will use this extracted information for deriving certain properties of objects\footnote{For example, finding the shape of the green object, or deriving if it is located on the left hand side of the image.}, or even for capturing the relations\footnote{Here, one could think of counting the number of circles in the image.} between the objects. 
 
 \section{ORGANIZATION OF THE PAPER}
+This paper will first provide some background in Section \ref{sec:literature_survey} on certain types of datasets that are typically used for Visual Question Answering purposes. % Maybe also more terminology? 
+Then, Section \ref{sec:approach} will dive deeper in the different components constituting the overall system. Once the general structure has been outlined, Section \ref{sec:experiments} provides some results of conducted experiments. A main focus in this paper is to outline the advantages of using a Neuro-Symbolic AI approach (offered by the DeepProbLog framework), instead of a purely neural network based approach. These specific experiments are listed in Subsection \ref{subsec:experiments_NN_vs_deepproblog}. Finally, the main findings of this paper are repeated in Section \ref{sec:conclusions}.
 
 \section{LITERATURE SURVEY}
 \label{sec:literature_survey}
@@ -44,7 +46,7 @@ The application focuses on Visual Question Answering (VQA), for which huge datas
     \end{center}
 \end{figure}
 
-Clearly, both system 1 and system 2 are actively used when answering these questions. One could wonder if neural networks alone could answer these questions without having an explicit system 2 encoding (i.e. the rule based knowledge base). Intuitively, it makes sense that if certain facts of the world are known\footnote{They can be encoded, e.g. counting the number of spheres is simply a matter of detecting all the spheres in the image, after which a mathematical summation is a statement in the knowledge base.}, learning can proceed much more quickly\footnote{Not to say that learning might even be impossible if a lot of background knowledge is required.}. Seen from an optimization viewpoint, errors made during prediction in this setup can be targeted exactly, which makes the optimization process also more targeted, and hence more efficient. Finally, this paper also provides evidence for these statements, since in Section \ref{comparison_with_CNN}, the comparison between a VQA implementation with DeepProbLog is made with a purely CNN based approach. % TODO is this the case?
+Clearly, both system 1 and system 2 are actively used when answering these questions. One could wonder if neural networks alone could answer these questions without having an explicit system 2 encoding (i.e. the rule based knowledge base). Intuitively, it makes sense that if certain facts of the world are known\footnote{They can be encoded, e.g. counting the number of spheres is simply a matter of detecting all the spheres in the image, after which a mathematical summation is a statement in the knowledge base.}, learning can proceed much more quickly\footnote{Not to say that learning might even be impossible if a lot of background knowledge is required.}. Seen from an optimization viewpoint, errors made during prediction in this setup can be targeted exactly, which makes the optimization process also more targeted, and hence more efficient. Finally, this paper also provides evidence for these statements, since in Subsection \ref{subsec:experiments_NN_vs_deepproblog}, the comparison between a VQA implementation with DeepProbLog is made with a purely CNN based approach. % TODO is this the case?
 
 This paper is based on the CLEVR dataset, but uses however a much more simplified version. In essence, it is almost like the Sort-Of-CLEVR dataset \cite{sort_of_clevr_dataset}. This Sort-Of-CLEVR dataset contains images such as in Figure \ref{fig:sample_image_sort_of_clevr}, while asking questions such as:
 \begin{itemize}
@@ -66,6 +68,7 @@ As explained earlier, both system 1 and system 2 are required for these types of
 Finally, since this application uses DeepProbLog, quite some time was spent in digesting the DeepProbLog paper \cite{deepproblog}, along with understanding the  examples provided in the code repository \cite{deepproblog_code}.
 
 \section{APPROACH}
+\label{sec:approach}
 The implementation process involved three main parts:
 \begin{enumerate}
     \item Generation of data.
@@ -111,9 +114,10 @@ The final thing (besides the logical rule encodings) required before commencing 
 Once the CNN belonging to a specific color has determined the position and the shape of that object, logical rules can deduce whether this object is located on the left hand side of the image, on the bottom side, and how many objects have the same shape. The logical rule program has been listed in Appendix \ref{appendix:logical_rule_encodings}
 
 \section{EXPERIMENTS}
+\label{sec:experiments}
 
 \subsection{COMPARISONS WITH PURE SYSTEM 1 APPROACHES}
-\label{comparison_with_CNN}
+\label{subsec:experiments_NN_vs_deepproblog}
 The network based on pure neural predicates is able to recognize the questions quickly, however, seems to experience difficulties when having to decide for the correct answer. This can clearly be seen in the confusion matrix (Figure \ref{fig:confusion_matrix_6x6_pure_NN}). % TODO also talk about confusion matrix of deepproblog
 
 \begin{figure}[H]
@@ -132,7 +136,7 @@ It is clear that the network trained with DeepProbLog is able to learn way faste
 , due to the high computational cost associated with the arithmetic parts of the circuit (i.e. the semirings).
 
 \section{CONCLUSIONS}
-
+\label{sec:conclusions}
 
 \section{APPENDIX}
 \subsection{Logical rule encodings}

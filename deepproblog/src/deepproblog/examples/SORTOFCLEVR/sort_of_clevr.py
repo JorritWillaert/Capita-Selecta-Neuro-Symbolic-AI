@@ -15,7 +15,7 @@ import random
 random.seed(0)
 #np.random.seed(args.seed)
 
-width = 2
+width = 6
 out_size = (width ** 2) * 2 # Times two for the distinction between squares and circles
 
 colors = ["red", "green", "blue", "orange", "grey", "yellow"]
@@ -29,6 +29,7 @@ nets = {}
 nets_ordered = []
 for color in colors:
     net = Network(cnns["cnn_" + color], "cnn_" + color, Adam(cnns["cnn_" + color].parameters(), lr=3e-3), batching=True)
+    #net.cuda()
     nets["net_" + color] = net
     nets_ordered.append(net)
 
@@ -49,10 +50,10 @@ train_accs = []
 train_log = train_model(
     model,
     loader,
-    1,
+    5,
     log_iter=1,
-    initial_test=False,
-    test_iter=20,
+    initial_test=True,
+    test_iter=25,
     test=lambda x: [
         #("Val_accuracy", get_confusion_matrix(x, val_dataset, eps=1e-6).accuracy()),
         ("Test_accuracy", get_confusion_matrix(x, test_dataset, eps=1e-6).accuracy()),

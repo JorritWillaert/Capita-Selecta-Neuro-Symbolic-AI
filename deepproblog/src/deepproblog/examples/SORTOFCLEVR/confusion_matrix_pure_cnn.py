@@ -25,13 +25,13 @@ network.load_state_dict(torch.load("models/model_pure_NN_6x6_100_iterations_16_0
 network.eval()
 # iterate over test data
 for (img, questions, answer) in test_loader:
-        output = network(img, questions) # Feed Network
+    output = network(img, questions) # Feed Network
 
-        output = torch.argmax(output, dim=1).cpu().numpy()
-        y_pred.extend(output) # Save Prediction
-        
-        labels = answer.cpu().numpy()
-        y_true.extend(labels) # Save Truth
+    output = torch.argmax(output, dim=1).cpu().numpy()
+    y_pred.extend(output) # Save Prediction
+
+    labels = answer.cpu().numpy()
+    y_true.extend(labels) # Save Truth
 
 # constant for classes
 classes = ('Rectangle', 'Circle', 'Yes', 'No', '1', '2', '3', '4', '5', '6')

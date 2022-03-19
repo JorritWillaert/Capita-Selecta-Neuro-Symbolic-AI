@@ -86,7 +86,7 @@ The data generator that was used for the creation of the Sort-Of-CLEVR dataset h
 
 \begin{figure}[htp]
     \begin{center}
-    \fbox{\includegraphics[width=0.3\textwidth]{sample_image_dataset.png}}
+    \fbox{\includegraphics[width=0.25\textwidth]{sample_image_dataset.png}}
     \captionsetup{justification=centering}
     \caption{A sample image from the dataset that has been used for this application}
     \label{fig:sample_image_own_dataset}
@@ -118,7 +118,7 @@ Once the CNN belonging to a specific color has determined the position and the s
 \label{sec:experiments}
 The main focus of this paper is to outline the advantages of using a Neuro-Symbolic AI approach (offered by the DeepProbLog framework), instead of a purely neural network based approach. Therefore, another purely neural network based approach had to be implemented. Not all details will be listed here, but the main idea is that the image has to be fused with the question, after which a prediction can be made\footnote{Possible answers on the questions are: rectangle, circle, yes, no, 1, 2, 3, 4, 5 and 6. Hence, the neural network will have 10 output nodes.}. The general structure of this network is given in Figure \ref{fig:pure_nn_network}.
 
-\begin{figure}[htp]
+\begin{figure}[H]
     \begin{center}
     \includegraphics[width=0.45\textwidth]{pure_nn_architecture.png} 
     \captionsetup{justification=centering}
@@ -141,7 +141,7 @@ The loss curves of both the DeepProbLog approach, as well as the purely neural n
     \end{center}
 \end{figure}
 
-\begin{figure}[htp]
+\begin{figure}[H]
     \begin{center}
     \includegraphics[width=0.45\textwidth]{loss_curve_pure_NN_2x2.png} 
     \captionsetup{justification=centering}
@@ -180,7 +180,7 @@ In these experiments, the training time of the purely neural network approach wa
 
 The most important observation here is that the purely neural network approach overfits quickly. Another important remark is the fact that both approaches are clearly not longer able to attain 100\% accuracy.
 
-Confusion matrices indicate where typical mistakes are made.
+In Figure \ref{fig:confusion_matrix_6x6_deepproblog} and Figure \ref{fig:confusion_matrix_6x6_pure_nn}, the confusion matrices are depicted in order to show where typical mistakes are made.
 
 \begin{figure}[htp]
     \begin{center}

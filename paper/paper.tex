@@ -29,7 +29,7 @@ The Neuro Symbolic AI field is interested in building a bridge between the robus
 This paper elaborates on an application that requires both systems to be used, namely Visual Question Answering. System 1 will be required in order to gain an understanding of the image under investigation, with in particular their shapes and colors. System 2, on the other hand, will use this extracted information for deriving certain properties of objects\footnote{For example, finding the shape of the green object, or deriving if it is located on the left hand side of the image.}, or even for capturing the relations\footnote{Here, one could think of counting the number of circles in the image.} between the objects. 
 
 \section{ORGANIZATION OF THE PAPER}
-This paper will first provide some necessary background in Section \ref{sec:literature_survey} on certain types of datasets that are typically used for Visual Question Answering purposes. Then, Section \ref{sec:approach} will dive deeper in the different components constituting the overall system. Section \ref{sec:experiments}, furthermore, provides some results of conducted experiments. A main focus in this paper is to outline the advantages of using a Neuro-Symbolic AI approach (offered by the DeepProbLog framework), instead of a purely neural network based approach. These specific experiments are listed in Subsection \ref{subsec:experiments_NN_vs_deepproblog}. Finally, the main findings of this paper are repeated in Section \ref{sec:conclusions}.
+This paper will first provide some necessary background in Section \ref{sec:literature_survey} on certain types of datasets that are typically used for Visual Question Answering purposes. Then, Section \ref{sec:approach} will dive deeper in the different components constituting the overall system. Section \ref{sec:experiments}, furthermore, provides some results of conducted experiments. A main focus in this paper is to outline the advantages of using a Neuro-Symbolic AI approach (offered by the DeepProbLog framework), instead of a purely neural network based approach. These experiments are listed in Section \ref{sec:experiments}. Finally, the main findings of this paper are repeated in Section \ref{sec:conclusions}.
 
 \section{LITERATURE SURVEY}
 \label{sec:literature_survey}
@@ -40,7 +40,7 @@ The application focuses on Visual Question Answering (VQA), for which huge datas
     \item How many objects are either small cylinders or metal things?
 \end{itemize}
 
-\begin{figure}[H]
+\begin{figure}[htp]
     \begin{center}
     \includegraphics[width=0.3\textwidth]{clevr.jpg}
     \captionsetup{justification=centering}
@@ -116,14 +116,46 @@ Once the CNN belonging to a specific color has determined the position and the s
 
 \section{EXPERIMENTS}
 \label{sec:experiments}
+The main focus of this paper is to outline the advantages of using a Neuro-Symbolic AI approach (offered by the DeepProbLog framework), instead of a purely neural network based approach. Therefore, another purely neural network based approach had to be implemented. Not all details will be listed here, but the main idea is that the image has to be fused with the question, after which a prediction can be made\footnote{Possible answers on the questions are: rectangle, circle, yes, no, 1, 2, 3, 4, 5 and 6. Hence, the neural network will have 10 output nodes.}. The general structure of this network is given in Figure \ref{fig:pure_nn_network}.
+
+\begin{figure}[htp]
+    \begin{center}
+    \includegraphics[width=0.45\textwidth]{pure_nn_architecture.png} 
+    \captionsetup{justification=centering}
+    \caption{Abstract representation of the purely neural network based architecture}
+    \label{fig:pure_nn_network}
+    \end{center}
+\end{figure}
 
 \subsection{COMPARISONS WITH PURE SYSTEM 1 APPROACHES}
 \label{subsec:experiments_NN_vs_deepproblog}
-% General outline of pure NN structure
+\subsubsection{Experiment: 2x2 grid}
+The loss curves of both the DeepProbLog approach, as well as the purely neural network based approach, are visualized respectively in Figure \ref{fig:loss_curve_deepproblog_2x2} and Figure \ref{fig:loss_curve_pure_NN_2x2}.
+
+\begin{figure}[htp]
+    \begin{center}
+    \includegraphics[width=0.3\textwidth]{loss_curve_deepproblog_2x2.png} 
+    \captionsetup{justification=centering}
+    \caption{DeepProbLog 2x2: Loss curve}
+    \label{fig:loss_curve_deepproblog_2x2}
+    \end{center}
+\end{figure}
+
+\begin{figure}[htp]
+    \begin{center}
+    \includegraphics[width=0.3\textwidth]{loss_curve_pure_NN_2x2.png} 
+    \captionsetup{justification=centering}
+    \caption{Pure NN based approach: Loss curve}
+    \label{fig:loss_curve_pure_NN_2x2}
+    \end{center}
+\end{figure}
+
+
+
 
 The network based on pure neural predicates is able to recognize the questions quickly, however, seems to experience difficulties when having to decide for the correct answer. This can clearly be seen in the confusion matrix (Figure \ref{fig:confusion_matrix_6x6_pure_NN}). % TODO also talk about confusion matrix of deepproblog
 
-\begin{figure}[H]
+\begin{figure}[htp]
     \begin{center}
     \includegraphics[width=0.3\textwidth]{confusion_matrix_pure_NN_6x6_clear_mistakes.png} 
     \captionsetup{justification=centering}

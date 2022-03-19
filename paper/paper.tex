@@ -122,7 +122,7 @@ The main focus of this paper is to outline the advantages of using a Neuro-Symbo
     \begin{center}
     \includegraphics[width=0.45\textwidth]{pure_nn_architecture.png} 
     \captionsetup{justification=centering}
-    \caption{Abstract representation of the purely neural network based architecture}
+    \caption{Abstract representation of the purely neural network based architecture \cite{model_architecture}}
     \label{fig:pure_nn_network}
     \end{center}
 \end{figure}
@@ -184,7 +184,7 @@ Confusion matrices indicate where typical mistakes are made.
 
 \begin{figure}[htp]
     \begin{center}
-    \includegraphics[width=0.3\textwidth]{confusion_matrix_6x6_deepproblog.png} 
+    \includegraphics[width=0.45\textwidth]{confusion_matrix_6x6_deepproblog.png} 
     \captionsetup{justification=centering}
     \caption{The confusion matrix of the 6x6 dataset from DeepProbLog}
     \label{fig:confusion_matrix_6x6_deepproblog}
@@ -193,30 +193,29 @@ Confusion matrices indicate where typical mistakes are made.
 
 \begin{figure}[htp]
     \begin{center}
-    \includegraphics[width=0.3\textwidth]{confusion_matrix_6x6_pure_NN.png} 
+    \includegraphics[width=0.45\textwidth]{confusion_matrix_6x6_pure_NN.png} 
     \captionsetup{justification=centering}
     \caption{The confusion matrix of the 6x6 dataset from the purely neural network approach}
     \label{fig:confusion_matrix_6x6_pure_nn}
     \end{center}
 \end{figure}
 
-% Denote difference between epochs and iterations!
-% Trained on CPU
+DeepProbLog naturally will not make any `nonsense' mistakes such as answering `yes' to the question `What shape has the object under investigation?', since the possible correct answers are encoded in the program each time. However, the purely neural network based approach has remarkably learned to link the possible answers to the questions.
 
-It is clear that the network trained with DeepProbLog is able to learn way faster then the purely NN based approach, if measured in the number of iterations \footnote{By the number of iterations, the number of training steps on a batch is meant.}. However, the differences in training time are much less significant% TODO give concrete measures
-, due to the high computational cost associated with the arithmetic parts of the circuit (i.e. the semirings).
+Another observation is that DeepProbLog is much better in answering the questions `What shape has the object under investigation?' and `Is the object located on the left hand side (or on the bottom side) of the image?' then a purely neural network approach is. This makes sense, since DeepProbLog can use its knowledge base to derive these properties, once the position (and shape) of the given object is determined.
+
+Regarding the binary question: `How many objects have the same shape as the object under investigation?', a lot more confusion in both approaches is going on. DeepProbLog will typically be able to come close to the correct answer, but may make some `off-by-one' mistakes\footnote{I.e. one CNN that is mispredicting the shape of its object.}. The purely neural network based approach does a little worse in this perspective. It is also plausible that in this approach, the neural network may have observed that due to probabilistic reasons, there are likely three or four equal objects (inclusive the one under investigation), and hence prefer such an answer.
 
 \section{CONCLUSIONS}
 \label{sec:conclusions}
 
-\section{APPENDIX}
+\bibliographystyle{bib_sobraep}
+\bibliography{Capita_Selecta_AI_Initial_Idea} 
+
+\section*{APPENDIX}
 \subsection{Logical rule encodings}
 \label{appendix:logical_rule_encodings}
 \inputminted[breaklines]{prolog}{"/home/jorrit/Data/KU Leuven/Semester 12/Capita Selecta H05N0a/deepproblog/src/deepproblog/examples/SORTOFCLEVR/model.pl"}
-
-
-\bibliographystyle{bib_sobraep}
-\bibliography{Capita_Selecta_AI_Initial_Idea} 
 
 %\balance
 

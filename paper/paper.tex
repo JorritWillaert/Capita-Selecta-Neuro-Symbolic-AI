@@ -145,7 +145,7 @@ The loss curves of both the DeepProbLog approach, as well as the purely neural n
     \begin{center}
     \includegraphics[width=0.45\textwidth]{loss_curve_pure_NN_2x2.png} 
     \captionsetup{justification=centering}
-    \caption{Pure NN based approach: Loss curve}
+    \caption{Pure NN based approach 2x2: Loss curve}
     \label{fig:loss_curve_pure_NN_2x2}
     \end{center}
 \end{figure}
@@ -153,20 +153,50 @@ An extremely important remark to be made is the difference between `Number of it
 
 From the loss curves, it is clear that both approaches seem to converge to an accuracy of 100\%. However, DeepProbLog only requires around 40 iterations, whereas the purely neural network based approach requires at least 250 000 iterations. This again demonstrates the value of neuro-symbolic AI.
 
-On the other hand, one has to consider the actual running times for those iterations. DeepProbLog takes around 10 minutes to finish its 160 iterations, while the purely neural network based approach requires around 15 minutes to finish 250 000 iterations. Taking into consideration that the purely neural network based approach can be accelerated massively (by using GPU's), while DeepProbLog can't\footnote{DeepProbLog offers the ability to send the CNN to a GPU for faster inference, however, the arithmetic operators (i.e. semirings) of DeepProbLog work on the CPU. These arithmetic operators possess by far the highest computational cost.}, it is clear that DeepProbLog trains much more targeted, but is computationally extremely heavy (at least for now).
+On the other hand, one has to consider the actual running times for those iterations. DeepProbLog takes around 10 minutes to finish its 160 iterations, while the purely neural network based approach requires around 5 minutes to finish 250 000 iterations. Taking into consideration that the purely neural network based approach can be accelerated massively (by using GPU's), while DeepProbLog can't\footnote{DeepProbLog offers the ability to send the CNN to a GPU for faster inference, however, the arithmetic operators (i.e. semirings) of DeepProbLog work on the CPU. These arithmetic operators possess by far the highest computational cost.}, it is clear that DeepProbLog trains much more targeted, but is computationally extremely heavy (at least for now).
 
 \subsubsection{Experiment: 6x6 grid}
-
-
-
-The network based on pure neural predicates is able to recognize the questions quickly, however, seems to experience difficulties when having to decide for the correct answer. This can clearly be seen in the confusion matrix (Figure \ref{fig:confusion_matrix_6x6_pure_NN}). % TODO also talk about confusion matrix of deepproblog
+The loss curves for the 6x6 experiment of DeepProbLog and the neural network based approach are depicted in respectively Figure \ref{fig:loss_curve_deepproblog_6x6} and Figure \ref{fig:loss_curve_pure_NN_6x6}.
 
 \begin{figure}[htp]
     \begin{center}
-    \includegraphics[width=0.3\textwidth]{confusion_matrix_pure_NN_6x6_clear_mistakes.png} 
+    \includegraphics[width=0.45\textwidth]{loss_curve_deepproblog_6x6.png} 
     \captionsetup{justification=centering}
-    \caption{The confusion matrix of the 6x6 dataset on a purely Neural Network based model}
-    \label{fig:confusion_matrix_6x6_pure_NN}
+    \caption{DeepProbLog 6x6: Loss curve}
+    \label{fig:loss_curve_deepproblog_6x6}
+    \end{center}
+\end{figure}
+
+\begin{figure}[htp]
+    \begin{center}
+    \includegraphics[width=0.45\textwidth]{loss_curve_pure_NN_6x6.png} 
+    \captionsetup{justification=centering}
+    \caption{Pure NN based approach 6x6: Loss curve}
+    \label{fig:loss_curve_pure_NN_6x6}
+    \end{center}
+\end{figure}
+
+In these experiments, the training time of the purely neural network approach was 20 minutes\footnote{For fair speed estimation, training has been conducted on the CPU.}, while the training time of the DeepProbLog approach was a little under eight hours\footnote{However, it should be mentioned that approximately half of the time was spent on calculating the accuracy each time, since the whole testing training set had to be forwarded through the network, while for the training iterations this is only one batch.}.
+
+The most important observation here is that the purely neural network approach overfits quickly. Another important remark is the fact that both approaches are clearly not longer able to attain 100\% accuracy.
+
+Confusion matrices indicate where typical mistakes are made.
+
+\begin{figure}[htp]
+    \begin{center}
+    \includegraphics[width=0.3\textwidth]{confusion_matrix_6x6_deepproblog.png} 
+    \captionsetup{justification=centering}
+    \caption{The confusion matrix of the 6x6 dataset from DeepProbLog}
+    \label{fig:confusion_matrix_6x6_deepproblog}
+    \end{center}
+\end{figure}
+
+\begin{figure}[htp]
+    \begin{center}
+    \includegraphics[width=0.3\textwidth]{confusion_matrix_6x6_pure_NN.png} 
+    \captionsetup{justification=centering}
+    \caption{The confusion matrix of the 6x6 dataset from the purely neural network approach}
+    \label{fig:confusion_matrix_6x6_pure_nn}
     \end{center}
 \end{figure}
 

@@ -134,7 +134,7 @@ The loss curves of both the DeepProbLog approach, as well as the purely neural n
 
 \begin{figure}[htp]
     \begin{center}
-    \includegraphics[width=0.3\textwidth]{loss_curve_deepproblog_2x2.png} 
+    \includegraphics[width=0.45\textwidth]{loss_curve_deepproblog_2x2.png} 
     \captionsetup{justification=centering}
     \caption{DeepProbLog 2x2: Loss curve}
     \label{fig:loss_curve_deepproblog_2x2}
@@ -143,13 +143,19 @@ The loss curves of both the DeepProbLog approach, as well as the purely neural n
 
 \begin{figure}[htp]
     \begin{center}
-    \includegraphics[width=0.3\textwidth]{loss_curve_pure_NN_2x2.png} 
+    \includegraphics[width=0.45\textwidth]{loss_curve_pure_NN_2x2.png} 
     \captionsetup{justification=centering}
     \caption{Pure NN based approach: Loss curve}
     \label{fig:loss_curve_pure_NN_2x2}
     \end{center}
 \end{figure}
+An extremely important remark to be made is the difference between `Number of iterations' and `Number of epochs'. By the number of iterations, the number of forward and backward passes of a batch (with size 32) is meant, whereas the number of epochs denote the number of times all the images of the training set are forward and backwardly passed. In this application, a training size of 10 000 was used, hence one epoch consists of 312.5 iterations.
 
+From the loss curves, it is clear that both approaches seem to converge to an accuracy of 100\%. However, DeepProbLog only requires around 40 iterations, whereas the purely neural network based approach requires at least 250 000 iterations. This again demonstrates the value of neuro-symbolic AI.
+
+On the other hand, one has to consider the actual running times for those iterations. DeepProbLog takes around 10 minutes to finish its 160 iterations, while the purely neural network based approach requires around 15 minutes to finish 250 000 iterations. Taking into consideration that the purely neural network based approach can be accelerated massively (by using GPU's), while DeepProbLog can't\footnote{DeepProbLog offers the ability to send the CNN to a GPU for faster inference, however, the arithmetic operators (i.e. semirings) of DeepProbLog work on the CPU. These arithmetic operators possess by far the highest computational cost.}, it is clear that DeepProbLog trains much more targeted, but is computationally extremely heavy (at least for now).
+
+\subsubsection{Experiment: 6x6 grid}
 
 
 

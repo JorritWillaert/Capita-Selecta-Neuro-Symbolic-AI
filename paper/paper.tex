@@ -1,4 +1,5 @@
 \documentclass[english]{sobraep}
+\usepackage{minted}
 
 \title{Visual Question Answering with DeepProbLog}
 
@@ -10,6 +11,9 @@
 \begin{document}
 
 \maketitle
+
+% TODO fix the numbering (also subsection = A)
+% TODO also maybe include some results from other papers.
 
 \begin{abstract}
 	TODO
@@ -25,8 +29,7 @@ The Neuro Symbolic AI field is interested in building a bridge between the robus
 This paper elaborates on an application that requires both systems to be used, namely Visual Question Answering. System 1 will be required in order to gain an understanding of the image under investigation, with in particular their shapes and colors. System 2, on the other hand, will use this extracted information for deriving certain properties of objects\footnote{For example, finding the shape of the green object, or deriving if it is located on the left hand side of the image.}, or even for capturing the relations\footnote{Here, one could think of counting the number of circles in the image.} between the objects. 
 
 \section{ORGANIZATION OF THE PAPER}
-This paper will first provide some background in Section \ref{sec:literature_survey} on certain types of datasets that are typically used for Visual Question Answering purposes. % Maybe also more terminology? 
-Then, Section \ref{sec:approach} will dive deeper in the different components constituting the overall system. Once the general structure has been outlined, Section \ref{sec:experiments} provides some results of conducted experiments. A main focus in this paper is to outline the advantages of using a Neuro-Symbolic AI approach (offered by the DeepProbLog framework), instead of a purely neural network based approach. These specific experiments are listed in Subsection \ref{subsec:experiments_NN_vs_deepproblog}. Finally, the main findings of this paper are repeated in Section \ref{sec:conclusions}.
+This paper will first provide some necessary background in Section \ref{sec:literature_survey} on certain types of datasets that are typically used for Visual Question Answering purposes. Then, Section \ref{sec:approach} will dive deeper in the different components constituting the overall system. Section \ref{sec:experiments}, furthermore, provides some results of conducted experiments. A main focus in this paper is to outline the advantages of using a Neuro-Symbolic AI approach (offered by the DeepProbLog framework), instead of a purely neural network based approach. These specific experiments are listed in Subsection \ref{subsec:experiments_NN_vs_deepproblog}. Finally, the main findings of this paper are repeated in Section \ref{sec:conclusions}.
 
 \section{LITERATURE SURVEY}
 \label{sec:literature_survey}
@@ -46,24 +49,24 @@ The application focuses on Visual Question Answering (VQA), for which huge datas
     \end{center}
 \end{figure}
 
-Clearly, both system 1 and system 2 are actively used when answering these questions. One could wonder if neural networks alone could answer these questions without having an explicit system 2 encoding (i.e. the rule based knowledge base). Intuitively, it makes sense that if certain facts of the world are known\footnote{They can be encoded, e.g. counting the number of spheres is simply a matter of detecting all the spheres in the image, after which a mathematical summation is a statement in the knowledge base.}, learning can proceed much more quickly\footnote{Not to say that learning might even be impossible if a lot of background knowledge is required.}. Seen from an optimization viewpoint, errors made during prediction in this setup can be targeted exactly, which makes the optimization process also more targeted, and hence more efficient. Finally, this paper also provides evidence for these statements, since in Subsection \ref{subsec:experiments_NN_vs_deepproblog}, the comparison between a VQA implementation with DeepProbLog is made with a purely CNN based approach. % TODO is this the case?
+Clearly, both system 1 and system 2 are actively used when answering these questions. One could wonder if neural networks alone could answer these questions without having an explicit system 2 encoding (i.e. the rule based knowledge base). Intuitively, it makes sense that if certain facts of the world are known\footnote{Facts can be encoded, e.g. counting the number of spheres is simply a matter of detecting all the spheres in the image, after which a mathematical summation is a statement in the knowledge base.}, learning can proceed much more quickly\footnote{Not to say that learning might even be impossible if a lot of background knowledge is required.}. Seen from an optimization viewpoint, errors made during prediction in this setup can be targeted exactly, which makes the optimization process more targeted as well, and hence more efficient. Finally, this paper also provides evidence for these statements, since in Subsection \ref{subsec:experiments_NN_vs_deepproblog}, the comparison between a VQA implementation with DeepProbLog is made with a purely CNN based approach. 
 
-This paper is based on the CLEVR dataset, but uses however a much more simplified version. In essence, it is almost like the Sort-Of-CLEVR dataset \cite{sort_of_clevr_dataset}. This Sort-Of-CLEVR dataset contains images such as in Figure \ref{fig:sample_image_sort_of_clevr}, while asking questions such as:
+This paper is inspired on the CLEVR dataset, but uses however a much more simplified version. In essence, it is almost like the Sort-Of-CLEVR dataset \cite{sort_of_clevr_dataset}. This Sort-Of-CLEVR dataset contains images such as in Figure \ref{fig:sample_image_sort_of_clevr}, while asking questions such as:
 \begin{itemize}
     \item Non-relational questions: the shape, horizontal or vertical location of an object.
     \item Relational questions: shape of the closest/furthest object to the object under investigation, or the number of objects with the same shape.
 \end{itemize}
 
-\begin{figure}[H]
+\begin{figure}[htp]
     \begin{center}
-    \includegraphics[width=0.3\textwidth]{sort_of_clevr.png}
+    \fbox{\includegraphics[width=0.25\textwidth]{sort_of_clevr.png}}
     \captionsetup{justification=centering}
     \caption{A sample image from the CLEVR dataset \cite{sort_of_clevr_dataset}}
     \label{fig:sample_image_sort_of_clevr}
     \end{center}
 \end{figure}
 
-As explained earlier, both system 1 and system 2 are required for these types of VQA's.
+As illustrated earlier, both system 1 and system 2 are required for these types of VQA's.
 
 Finally, since this application uses DeepProbLog, quite some time was spent in digesting the DeepProbLog paper \cite{deepproblog}, along with understanding the  examples provided in the code repository \cite{deepproblog_code}.
 
@@ -72,20 +75,18 @@ Finally, since this application uses DeepProbLog, quite some time was spent in d
 The implementation process involved three main parts:
 \begin{enumerate}
     \item Generation of data.
-    \item Creation of the logical part with DeepProbLog statements.
     \item Linking the data and controlling the training process in pure Python code.
+    \item Creation of the logical part with DeepProbLog statements.
 \end{enumerate}
 
-% TODO maybe elaborate why I switched from having a CNN per square in the grid, to one CNN per color.
-
 \subsection{Generation of data}
-As mentioned in Section \ref{sec:literature_survey}, the data used in this application is based on the Sort Of CLEVR dataset, with one extra simplification. Given that the logical part will have to decide whether an object is located on the left side of an image, the neural network will have to convey positional information to the logical part. Hence, each discrete position will have to be encoded by a possible outcome of the neural network. Therefore, objects may only be located at certain places in a grid. In this application, a grid of 2x2, 4x4 and 6x6 has been used.
+As mentioned in Section \ref{sec:literature_survey}, the data used in this application is based on the Sort-Of-CLEVR dataset, with one extra simplification. Given that the logical part will have to decide whether an object is for example located on the left side of an image, the neural network will have to convey positional information to the logical part. Hence, each discrete position will have to be encoded by a possible outcome of the neural network. Therefore, objects may only be located at certain places in a grid. In this paper, results on a grid of 2x2 and 6x6 are discussed.
 
-The data generator that was used for the creation of the Sort Of CLEVR dataset has been modified in order to place objects in the mentioned grid positions \cite{sort_of_clevr_dataset}. An example of a generated image is given in Figure \ref{fig:sample_image_own_dataset}.
+The data generator that was used for the creation of the Sort-Of-CLEVR dataset has been modified in order to place objects in the mentioned grid positions \cite{sort_of_clevr_dataset}. An example of a generated image is given in Figure \ref{fig:sample_image_own_dataset}, where the difference with Figure \ref{fig:sample_image_sort_of_clevr} is the grid-layout.
 
-\begin{figure}[H]
+\begin{figure}[htp]
     \begin{center}
-    \includegraphics[width=0.3\textwidth]{sample_image_dataset.png}
+    \fbox{\includegraphics[width=0.3\textwidth]{sample_image_dataset.png}}
     \captionsetup{justification=centering}
     \caption{A sample image from the dataset that has been used for this application}
     \label{fig:sample_image_own_dataset}
@@ -94,30 +95,32 @@ The data generator that was used for the creation of the Sort Of CLEVR dataset h
 
 Each specified color will have an object located somewhere in the grid, of which the shape can be a square or a circle.
 
-These images are accompanied with three non-binary questions and one binary question. For each question, a random object is chosen. The possibilities are:
-\begin{enumerate}
+These images are accompanied with a question about a random object, which can be one of the following:
+\begin{itemize}
     \item Non-binary - What is the shape of this object \footnote{I.e. the shape will be either a square or a circle.}?
     \item Non-binary - Is this object located on the left side of the image?
     \item Non-binary - Is this object located on the bottom side of the image?
-    \item Binary - How many objects have the same shape of this object?
-\end{enumerate}
+    \item Binary - How many objects have the same shape as this object?
+\end{itemize}
 
-These questions are encoded in a one-hot encoding, after which they are stored in a CSV file, along with the expected answers. A training set, a validation set, and a test set are generated. % Validation set useful?
+These questions are encoded in a one-hot encoding, after which they are stored in a CSV file, along with the expected answers. To make the training process more efficient, a training and test dataset has been generated beforehand.
 
 \subsection{Controlling the training process}
-The overall training process is controlled via the Python interfaces of DeepProbLog, along with general PyTorch implementations of the CNN's.
-First of all, CNN's are defined with PyTorch. A relatively simple network is used, where the input is given as a square RGB image of 100 pixels wide, which is transformed by the CNN into 72 output features for the 6x6 grid. Each color that is present in the image has its accompanied CNN network, hence the 72 output features encode the possible positions of the object with that color, along with their shape, which can be either square or circular ($6 \cdot 6 \cdot 2 = 72$).
+The overall training process is controlled via the Python API of DeepProbLog, along with general PyTorch implementations of the CNN's.
+First of all, CNN's are defined with PyTorch. A relatively simple network is used, where the input is given as a square RGB image of 100 pixels wide, which is transformed by the CNN into 72 output features for the 6x6 grid\footnote{For the 2x2 grid example, 8 output features are required.}. Each color that is present in the image has its accompanied CNN network, hence the 72 output features encode the possible positions of the object with that color, along with their shape, which can be either square or circular ($6 \cdot 6 \cdot 2 = 72$).
 
-The final thing (besides the logical rule encodings) required before commencing the training process, are the data loaders. The most challenging part here is the transformation from the generated data to specific query mappings and their outcome. One of the questions are chosen, and a correct mapping between a predicate in the logical rule encoding file and the answer is set up.
+The final thing (besides the logical rule encodings) required before commencing the training process, are the data loaders. The most challenging part here is the transformation from the generated data to specific query mappings and their outcome. 
 
 \subsection{Logical rule encodings}
-Once the CNN belonging to a specific color has determined the position and the shape of that object, logical rules can deduce whether this object is located on the left hand side of the image, on the bottom side, and how many objects have the same shape. The logical rule program has been listed in Appendix \ref{appendix:logical_rule_encodings}
+Once the CNN belonging to a specific color has determined the position and the shape of that object, logical rules can deduce whether this object is located on the left hand side of the image, on the bottom side, and how many objects have the same shape. The logical rule program has been listed in Appendix \ref{appendix:logical_rule_encodings}.
 
 \section{EXPERIMENTS}
 \label{sec:experiments}
 
 \subsection{COMPARISONS WITH PURE SYSTEM 1 APPROACHES}
 \label{subsec:experiments_NN_vs_deepproblog}
+% General outline of pure NN structure
+
 The network based on pure neural predicates is able to recognize the questions quickly, however, seems to experience difficulties when having to decide for the correct answer. This can clearly be seen in the confusion matrix (Figure \ref{fig:confusion_matrix_6x6_pure_NN}). % TODO also talk about confusion matrix of deepproblog
 
 \begin{figure}[H]
@@ -141,7 +144,8 @@ It is clear that the network trained with DeepProbLog is able to learn way faste
 \section{APPENDIX}
 \subsection{Logical rule encodings}
 \label{appendix:logical_rule_encodings}
-% TODO put logical rules here
+\inputminted[breaklines]{prolog}{"/home/jorrit/Data/KU Leuven/Semester 12/Capita Selecta H05N0a/deepproblog/src/deepproblog/examples/SORTOFCLEVR/model.pl"}
+
 
 \bibliographystyle{bib_sobraep}
 \bibliography{Capita_Selecta_AI_Initial_Idea} 

@@ -97,9 +97,9 @@ Each specified color will have an object located somewhere in the grid, of which
 
 These images are accompanied with a question about a random object, which can be one of the following:
 \begin{itemize}
-    \item Non-binary - What is the shape of this object \footnote{I.e. the shape will be either a square or a circle.}?
-    \item Non-binary - Is this object located on the left side of the image?
-    \item Non-binary - Is this object located on the bottom side of the image?
+    \item Non-relational - What is the shape of this object \footnote{I.e. the shape will be either a square or a circle.}?
+    \item Non-relational - Is this object located on the left side of the image?
+    \item Non-relational - Is this object located on the bottom side of the image?
     \item Binary - How many objects have the same shape as this object?
 \end{itemize}
 
@@ -204,10 +204,15 @@ DeepProbLog naturally will not make any `nonsense' mistakes such as answering `y
 
 Another observation is that DeepProbLog is much better in answering the questions `What shape has the object under investigation?' and `Is the object located on the left hand side (or on the bottom side) of the image?' then a purely neural network approach is. This makes sense, since DeepProbLog can use its knowledge base to derive these properties, once the position (and shape) of the given object is determined. The observation that a pure neural network based approach has a much harder time to distinguish these cases, was also observed by \cite{sort_of_clevr_dataset}, where they achieved an accuracy of 52.3\% on these questions with a pure neural network based approach.
 
-Regarding the binary question: `How many objects have the same shape as the object under investigation?', a lot more confusion in both approaches is going on. DeepProbLog will typically be able to come close to the correct answer, but may make some `off-by-one' mistakes\footnote{I.e. one CNN that is mispredicting the shape of its object.}. The purely neural network based approach does a little worse in this perspective. It is also plausible that in this approach, the neural network may have observed that due to probabilistic reasons, there are likely three or four equal objects (inclusive the one under investigation), and hence prefer such an answer.
+Regarding the relational question: `How many objects have the same shape as the object under investigation?', a lot more confusion in both approaches is going on. DeepProbLog will typically be able to come close to the correct answer, but may make some `off-by-one' mistakes\footnote{I.e. one CNN that is mispredicting the shape of its object.}. The purely neural network based approach does a little worse in this perspective. It is also plausible that in this approach, the neural network may have observed that due to probabilistic reasons, there are likely three or four equal objects (inclusive the one under investigation), and hence prefer such an answer.
 
 \section{CONCLUSIONS}
 \label{sec:conclusions}
+The strengths of the Neuro Symbolic AI field have been demonstrated in the context of Visual Question Answering. By using DeepProbLog, the chosen framework for the Neuro Symbolic AI task, it became clear that almost 200 times less iterations are required to achieve the same accuracy as a purely neural network based approach. However, due to the costly algebraic operators, the total training time of the DeepProbLog approach was still more than twenty times slower, compared to the purely neural network based approach. 
+
+Important to notice, however, is that DeepProbLog performs a lot better on the non-relational questions. This because the knowledge base can derive these properties much more accurately, while a purely neural network based approach has more difficulties with such derivations.
+
+Hence, a lot of value can be seen in Neuro Symbolic AI approaches, despite the costly algebraic operators. Especially because for tasks where the knowledge base is much larger, these approaches can make the difference between being able to learn a certain task or not. Over time, speedups for these algebraic operators could probably be developed, which opens the road to even more applications.
 
 \bibliographystyle{bib_sobraep}
 \bibliography{Capita_Selecta_AI_Initial_Idea} 

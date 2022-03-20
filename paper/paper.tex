@@ -11,12 +11,10 @@
 \begin{document}
 
 \maketitle
-
-% TODO fix the numbering (also subsection = A)
-% TODO also maybe include some results from other papers.
+% TODO also maybe include some results from other papers. (E.g. see paper of relational-networks)
 
 \begin{abstract}
-	TODO
+	This report focusses on Visual Question Answering, where a Neuro Symbolic AI approach with a knowledge base is compared with a purely neural network based approach. From the experiments, it follows that DeepProbLog, the framework used for the Neuro Symbolic AI approach, is able to achieve the same accuracy as the pure neural network based approach with almost 200 times less iterations. Clearly, the training is much more targeted, but however, comes at a cost. The algebraic operators internal to DeepProbLog are extremely costly and hence the actual training time is more then twenty times slower, when both approaches were trained on a CPU. Another drawback of DeepProbLog is that no easy speedups can be achieved, since the algebraic operators only work on CPU's, and hence cannot benefit from accelerators such as GPU's.
 \end{abstract}
 
 \begin{keywords}
@@ -49,7 +47,7 @@ The application focuses on Visual Question Answering (VQA), for which huge datas
     \end{center}
 \end{figure}
 
-Clearly, both system 1 and system 2 are actively used when answering these questions. One could wonder if neural networks alone could answer these questions without having an explicit system 2 encoding (i.e. the rule based knowledge base). Intuitively, it makes sense that if certain facts of the world are known\footnote{Facts can be encoded, e.g. counting the number of spheres is simply a matter of detecting all the spheres in the image, after which a mathematical summation is a statement in the knowledge base.}, learning can proceed much more quickly\footnote{Not to say that learning might even be impossible if a lot of background knowledge is required.}. Seen from an optimization viewpoint, errors made during prediction in this setup can be targeted exactly, which makes the optimization process more targeted as well, and hence more efficient. Finally, this paper also provides evidence for these statements, since in Subsection \ref{subsec:experiments_NN_vs_deepproblog}, the comparison between a VQA implementation with DeepProbLog is made with a purely CNN based approach. 
+Clearly, both system 1 and system 2 are actively used when answering these questions. One could wonder if neural networks alone could answer these questions without having an explicit system 2 encoding (i.e. the rule based knowledge base). Intuitively, it makes sense that if certain facts of the world are known\footnote{Facts can be encoded, e.g. counting the number of spheres is simply a matter of detecting all the spheres in the image, after which a mathematical summation is a statement in the knowledge base.}, learning can proceed much more quickly\footnote{Not to say that learning might even be impossible if a lot of background knowledge is required.}. Seen from an optimization viewpoint, errors made during prediction in this setup can be targeted exactly, which makes the optimization process more targeted as well, and hence more efficient. Finally, this paper also provides evidence for these statements, since in subsection \ref{subsec:experiments_NN_vs_deepproblog}, the comparison between a VQA implementation with DeepProbLog is made with a purely CNN based approach. 
 
 This paper is inspired on the CLEVR dataset, but uses however a much more simplified version. In essence, it is almost like the Sort-Of-CLEVR dataset \cite{sort_of_clevr_dataset}. This Sort-Of-CLEVR dataset contains images such as in Figure \ref{fig:sample_image_sort_of_clevr}, while asking questions such as:
 \begin{itemize}
@@ -67,6 +65,8 @@ This paper is inspired on the CLEVR dataset, but uses however a much more simpli
 \end{figure}
 
 As illustrated earlier, both system 1 and system 2 are required for these types of VQA's.
+
+A. Santoro et al. conducted similar experiment with the Sort-of-CLEVR dataset as in this paper, where they were able to achieve an accuracy of 63\% on relational questions with CNN's, whereas an accuracy of 94\% for both relational and non-relational questions was achieved with CNN's complemented with an RN. For them, augmenting the model with a relational module, such as an RN, turned out to be sufficient to overcome the hurdle of solving relational questions \cite{sort_of_clevr_dataset}.
 
 Finally, since this application uses DeepProbLog, quite some time was spent in digesting the DeepProbLog paper \cite{deepproblog}, along with understanding the  examples provided in the code repository \cite{deepproblog_code}.
 
@@ -151,9 +151,9 @@ The loss curves of both the DeepProbLog approach, as well as the purely neural n
 \end{figure}
 An extremely important remark to be made is the difference between `Number of iterations' and `Number of epochs'. By the number of iterations, the number of forward and backward passes of a batch (with size 32) is meant, whereas the number of epochs denote the number of times all the images of the training set are forward and backwardly passed. In this application, a training size of 10 000 was used, hence one epoch consists of 312.5 iterations.
 
-From the loss curves, it is clear that both approaches seem to converge to an accuracy of 100\%. However, DeepProbLog only requires around 40 iterations, whereas the purely neural network based approach requires at least 250 000 iterations. This again demonstrates the value of neuro-symbolic AI.
+From the loss curves, it is clear that both approaches seem to converge to an accuracy of 100\%. However, DeepProbLog only requires around 40 iterations, whereas the purely neural network based approach requires at least 7 800 iterations. This again demonstrates the value of Neuro Symbolic AI.
 
-On the other hand, one has to consider the actual running times for those iterations. DeepProbLog takes around 10 minutes to finish its 160 iterations, while the purely neural network based approach requires around 5 minutes to finish 250 000 iterations. Taking into consideration that the purely neural network based approach can be accelerated massively (by using GPU's), while DeepProbLog can't\footnote{DeepProbLog offers the ability to send the CNN to a GPU for faster inference, however, the arithmetic operators (i.e. semirings) of DeepProbLog work on the CPU. These arithmetic operators possess by far the highest computational cost.}, it is clear that DeepProbLog trains much more targeted, but is computationally extremely heavy (at least for now).
+On the other hand, one has to consider the actual running times for those iterations. DeepProbLog takes around 10 minutes to finish its 160 iterations, while the purely neural network based approach requires around 5 minutes to finish 7 800 iterations. Taking into consideration that the purely neural network based approach can be accelerated massively (by using GPU's), while DeepProbLog can't\footnote{DeepProbLog offers the ability to send the CNN to a GPU for faster inference, however, the arithmetic operators (i.e. semirings) of DeepProbLog work on the CPU. These arithmetic operators possess by far the highest computational cost.}, it is clear that DeepProbLog trains much more targeted, but is computationally extremely heavy (at least for now).
 
 \subsubsection{Experiment: 6x6 grid}
 The loss curves for the 6x6 experiment of DeepProbLog and the neural network based approach are depicted in respectively Figure \ref{fig:loss_curve_deepproblog_6x6} and Figure \ref{fig:loss_curve_pure_NN_6x6}.
@@ -202,7 +202,7 @@ In Figure \ref{fig:confusion_matrix_6x6_deepproblog} and Figure \ref{fig:confusi
 
 DeepProbLog naturally will not make any `nonsense' mistakes such as answering `yes' to the question `What shape has the object under investigation?', since the possible correct answers are encoded in the program each time. However, the purely neural network based approach has remarkably learned to link the possible answers to the questions.
 
-Another observation is that DeepProbLog is much better in answering the questions `What shape has the object under investigation?' and `Is the object located on the left hand side (or on the bottom side) of the image?' then a purely neural network approach is. This makes sense, since DeepProbLog can use its knowledge base to derive these properties, once the position (and shape) of the given object is determined.
+Another observation is that DeepProbLog is much better in answering the questions `What shape has the object under investigation?' and `Is the object located on the left hand side (or on the bottom side) of the image?' then a purely neural network approach is. This makes sense, since DeepProbLog can use its knowledge base to derive these properties, once the position (and shape) of the given object is determined. The observation that a pure neural network based approach has a much harder time to distinguish these cases, was also observed by \cite{sort_of_clevr_dataset}, where they achieved an accuracy of 52.3\% on these questions with a pure neural network based approach.
 
 Regarding the binary question: `How many objects have the same shape as the object under investigation?', a lot more confusion in both approaches is going on. DeepProbLog will typically be able to come close to the correct answer, but may make some `off-by-one' mistakes\footnote{I.e. one CNN that is mispredicting the shape of its object.}. The purely neural network based approach does a little worse in this perspective. It is also plausible that in this approach, the neural network may have observed that due to probabilistic reasons, there are likely three or four equal objects (inclusive the one under investigation), and hence prefer such an answer.
 

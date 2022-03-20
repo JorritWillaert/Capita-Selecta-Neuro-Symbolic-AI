@@ -126,8 +126,8 @@
 
 %Seções
 \setcounter{secnumdepth}{3}
-\def\thesection {\Roman{section}.\hskip-7.2pt}
-\def\thesubsection {\Alph{subsection}.\hskip-7.2pt}
+%\def\thesection {\Roman{section}.\hskip-7.2pt}
+%\def\thesubsection {\Alph{subsection}.\hskip-7.2pt}
 \def\thesubsubsection {\arabic{subsubsection})\hskip-7.2pt}
 
 \renewcommand\section{\@startsection {section}{1}{\z@}{2.0ex plus
@@ -179,7 +179,7 @@
 \newcommand{\figref}[1]{Figure~\ref{#1}}   % Cross-reference of figures
 \newcommand{\tabref}[1]{Table~\ref{#1}}    % Cross-reference of tables
 \newcommand{\eqnref}[1]{\eqref{#1}}      % Cross-reference of equations
-\newcommand{\secref}[1]{Section~\ref{#1}}  % Cross-reference of equations
+\newcommand{\secref}[1]{Section~\ref{#1} \space }  % Cross-reference of equations
 \newcommand{\defref}[1]{Definition~\ref{#1}} % 
 \else
 \newcommand{\figref}[1]{Figura~\ref{#1}}   % Cross-reference of figures

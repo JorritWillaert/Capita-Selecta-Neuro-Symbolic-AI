@@ -178,7 +178,7 @@ The loss curves for the 6x6 experiment of DeepProbLog and the neural network bas
 
 In these experiments, the training time of the purely neural network approach was 20 minutes\footnote{For fair speed estimation, training has been conducted on the CPU.}, while the training time of the DeepProbLog approach was a little under eight hours\footnote{However, it should be mentioned that approximately half of the time was spent on calculating the accuracy each time, since the whole testing testing set had to be forwarded through the network, while for the training iterations this is only one batch.}.
 
-The most important observation here is that the purely neural network approach overfits quickly and also achieves a considerably lower accuracy (68\% instead of almost 75\% for DeepProbLog). Another important remark is the fact that both approaches are clearly not longer able to attain 100\% accuracy. However, if the DeepProbLog network could train longer, it would be able to converge even further.
+The most important observation here is that the purely neural network approach overfits quickly and also achieves a considerably lower accuracy (68\% instead of almost 75\% for DeepProbLog). Another important remark is the fact that both approaches are clearly not longer able to attain 100\% accuracy. However, if the DeepProbLog network could train longer, it would be able to converge somewhat further.
 
 In Figure \ref{fig:confusion_matrix_6x6_deepproblog} and Figure \ref{fig:confusion_matrix_6x6_pure_nn}, the confusion matrices are depicted in order to show where typical mistakes are made.
 
@@ -200,11 +200,11 @@ In Figure \ref{fig:confusion_matrix_6x6_deepproblog} and Figure \ref{fig:confusi
     \end{center}
 \end{figure}
 
-DeepProbLog naturally will not make any `nonsense' mistakes such as answering `yes' to the question `What shape has the object under investigation?', since the possible correct answers are encoded in the program each time. However, the purely neural network based approach has remarkably learned to link the possible answers to the questions.
+DeepProbLog naturally will not make any `nonsense' mistakes such as answering `yes' to the question `What shape has the object under investigation?', since the possible correct answers are encoded in the program. However, the purely neural network based approach has learned perfectly to link the possible answers to the questions.
 
 Another observation is that DeepProbLog is much better in answering the questions `What shape has the object under investigation?' and `Is the object located on the left hand side (or on the bottom side) of the image?' then a purely neural network approach is. This makes sense, since DeepProbLog can use its knowledge base to derive these properties, once the position (and shape) of the given object is determined. The observation that a pure neural network based approach has a much harder time to distinguish these cases, was also observed by \cite{sort_of_clevr_dataset}, where they achieved an accuracy of 52.3\% on these questions with a pure neural network based approach.
 
-Regarding the relational question: `How many objects have the same shape as the object under investigation?', a lot more confusion in both approaches is going on. DeepProbLog will typically be able to come close to the correct answer, but may make some `off-by-one' mistakes\footnote{I.e. one CNN that is mispredicting the shape of its object.}. The purely neural network based approach does a little worse in this perspective. It is also plausible that in this approach, the neural network may have observed that due to probabilistic reasons, there are likely three or four equal objects (inclusive the one under investigation), and hence prefer such an answer.
+Regarding the relational question: `How many objects have the same shape as the object under investigation?', a lot more confusion in both approaches is going on. DeepProbLog will typically be able to come close to the correct answer, but may make some `off-by-one' mistakes\footnote{I.e. one CNN that is mispredicting the shape of its object.}. The purely neural network based approach does also in this perspective a little worse. It is also plausible that in this approach, the neural network may have observed that due to probabilistic reasons, there are likely three or four equal objects (inclusive the one under investigation), and hence prefers such an answer.
 
 \section{CONCLUSIONS}
 \label{sec:conclusions}

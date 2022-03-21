@@ -178,7 +178,7 @@ def build_dataset_item():
 
 if __name__ == "__main__":
     size = str(WIDTH) + "x" + str(WIDTH)
-    for (dataset, num, seed) in [("train", 10000, 0), ("val", 500, 1), ("test", 500, 2)]:
+    for (dataset, num, seed) in [("train", 10000, 0), ("val", 10000, 1), ("test", 500, 2)]:
         path = '../deepproblog/src/deepproblog/examples/SORTOFCLEVR/data/' + size + '/' + dataset
 
         if not os.path.exists(path + '/images'):

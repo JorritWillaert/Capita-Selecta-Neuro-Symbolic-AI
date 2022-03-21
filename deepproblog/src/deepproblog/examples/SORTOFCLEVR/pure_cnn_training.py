@@ -10,8 +10,9 @@ from torch import nn, tensor
 import time
 
 # Check if GPU is available
-device = "cuda" if torch.cuda.is_available() else "cpu"
-print(f"Using {device} device")
+#device = "cuda" if torch.cuda.is_available() else "cpu"
+#print(f"Using {device} device")
+device = "cpu"
 
 def accuracy_metric(predictions, expected):
     pred = torch.argmax(predictions, dim=1) # Indices of the max value of all elements -> 0 if "no" has highest probability, 1 if "yes"
@@ -127,7 +128,7 @@ epochs = 100
 train_loss, test_loss, epoch_accs, times = train(network, train_loader, test_loader, loss_function, optimizer, epochs, accuracy_metric, batch_size)
 import pickle
 
-with open('values_of_training_16_03_2022_13_00_6x6_100_epochs.pk', 'wb') as fp:
+with open('values_of_training_19_03_2022_16_00_6x6_100_epochs.pk', 'wb') as fp:
     pickle.dump(train_loss, fp)
     pickle.dump(test_loss, fp)
     pickle.dump(epoch_accs, fp)

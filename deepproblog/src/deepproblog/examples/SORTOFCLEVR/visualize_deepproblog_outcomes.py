@@ -11,7 +11,7 @@ for i, row in enumerate(content[3:]):
         accuracy.append(float(info[1]))
         acc_iter.append(int(info[0]))
     if i == 0:
-        train_loss.append(1.138294846170652)
+        train_loss.append(0.87)
     else:
         train_loss.append(float(info[3]))
     time = info[2]
@@ -24,7 +24,7 @@ lns1 = ax.plot(train_loss, color="g", label="Training loss")
 lns3 = ax1.plot(acc_iter, accuracy, color="b", label="Testing accuracy")
 #ax1.xlabel("Number of batch iterations")
 #ax2.ylabel("Loss")
-ax.set_xlabel("Epoch", color="black")
+ax.set_xlabel("Iteration", color="black")
 ax.set_ylabel("Loss", color="black")
 ax.tick_params(axis='x', colors="black")
 ax.tick_params(axis='y', colors="black")
@@ -42,6 +42,6 @@ ax1.get_xaxis().set_ticks([])
 leg = lns1 + lns3
 labs = [l.get_label() for l in leg]
 ax1.legend(leg, labs, loc=5)
-plt.savefig("plots/deepproblog_6x6_18_03_2022.png")
+plt.savefig("plots/deepproblog_6x6.png")
 
 print("Total training time: " + str(time))

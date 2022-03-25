@@ -5,7 +5,8 @@
 
 \author{Jorrit Willaert$^{1}$ \\
 	\normalsize $^{1}$Catholic University of Leuven, Leuven -- Belgium \\
-	\normalsize e-mail: jorrit.willaert@student.kuleuven.be
+	\normalsize e-mail: jorrit.willaert@student.kuleuven.be \\
+    \normalsize code repository: https://github.com/JorritWillaert/Capita-Selecta-Neuro-Symbolic-AI
 }
 
 \begin{document}
@@ -116,7 +117,7 @@ Once the CNN belonging to a specific color has determined the position and the s
 
 \section{EXPERIMENTS}
 \label{sec:experiments}
-The main focus of this paper is to outline the advantages of using a Neuro Symbolic AI approach (offered by the DeepProbLog framework), instead of a purely neural network based approach. Therefore, a neural network based approach had to be implemented. Not all details will be listed here, but the main idea is that the image has to be fused with the question, after which a prediction can be made\footnote{Possible answers on the questions are: rectangle, circle, yes, no, 1, 2, 3, 4, 5 and 6. Hence, the neural network will have 10 output nodes. Care has been taken for class skew, by introducing weights in the loss function.}. The general structure of this network is given in Figure \ref{fig:pure_nn_network}.
+The main focus of this paper is to outline the advantages of using a Neuro Symbolic AI approach (offered by the DeepProbLog framework), instead of a purely neural network based approach. Therefore, a neural network based approach had to be implemented. Not all details will be listed here, but the main idea is that the image has to be fused whttps://github.com/JorritWillaert/Capita-Selecta-Neuro-Symbolic-AIith the question, after which a prediction can be made\footnote{Possible answers on the questions are: rectangle, circle, yes, no, 1, 2, 3, 4, 5 and 6. Hence, the neural network will have 10 output nodes. Care has been taken for class skew, by introducing weights in the loss function.}. The general structure of this network is given in Figure \ref{fig:pure_nn_network}.
 
 \begin{figure}[H]
     \begin{center}
@@ -134,7 +135,7 @@ The loss curves of both the DeepProbLog approach, as well as the purely neural n
 
 \begin{figure}[htp]
     \begin{center}
-    \includegraphics[width=0.45\textwidth]{loss_curve_deepproblog_2x2.png} 
+    \includegraphics[width=0.40\textwidth]{loss_curve_deepproblog_2x2.png} 
     \captionsetup{justification=centering}
     \caption{DeepProbLog 2x2: Loss curve}
     \label{fig:loss_curve_deepproblog_2x2}
@@ -143,7 +144,7 @@ The loss curves of both the DeepProbLog approach, as well as the purely neural n
 
 \begin{figure}[htp]
     \begin{center}
-    \includegraphics[width=0.45\textwidth]{loss_curve_pure_NN_2x2.png} 
+    \includegraphics[width=0.40\textwidth]{loss_curve_pure_NN_2x2.png} 
     \captionsetup{justification=centering}
     \caption{Pure NN based approach 2x2: Loss curve}
     \label{fig:loss_curve_pure_NN_2x2}
@@ -160,7 +161,7 @@ The loss curves for the 6x6 experiment of DeepProbLog and the neural network bas
 
 \begin{figure}[htp]
     \begin{center}
-    \includegraphics[width=0.45\textwidth]{loss_curve_deepproblog_6x6.png} 
+    \includegraphics[width=0.40\textwidth]{loss_curve_deepproblog_6x6.png} 
     \captionsetup{justification=centering}
     \caption{DeepProbLog 6x6: Loss curve}
     \label{fig:loss_curve_deepproblog_6x6}
@@ -169,7 +170,7 @@ The loss curves for the 6x6 experiment of DeepProbLog and the neural network bas
 
 \begin{figure}[htp]
     \begin{center}
-    \includegraphics[width=0.45\textwidth]{loss_curve_pure_NN_6x6.png} 
+    \includegraphics[width=0.40\textwidth]{loss_curve_pure_NN_6x6.png} 
     \captionsetup{justification=centering}
     \caption{Pure NN based approach 6x6: Loss curve}
     \label{fig:loss_curve_pure_NN_6x6}
